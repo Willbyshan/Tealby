@@ -3316,6 +3316,8 @@ function Tealby() {
                 src={scene.image}
                 alt=""
                 style={{ width: "100%", display: "block", objectFit: "cover" }}
+                onError={(e) => { e.target.style.outline = "3px solid red"; e.target.alt = "LOAD FAILED: " + scene.image; }}
+                onLoad={(e) => { e.target.style.outline = "3px solid lime"; }}
               />
             </div>
           )}
