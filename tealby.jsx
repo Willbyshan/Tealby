@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+const { useState, useEffect, useRef } = React;
 
 // ============================================================
 // THREAD SYSTEM
@@ -42,7 +42,6 @@ const SCENES = {
   // ── OPENING ──────────────────────────────────────────────
   opening: {
     nico: "neutral",
-    image: "https://raw.githubusercontent.com/Willbyshan/tealby-assets/main/bedroomscene1.png",
     prose: {
       high: [
         "Light first. Warm and golden, the kind that comes through thin curtains on a summer morning.",
@@ -2606,7 +2605,7 @@ function LockMiniGame({ onWin, onLeave, inventory }) {
 // ============================================================
 // APP
 // ============================================================
-export default function Tealby() {
+function Tealby() {
   const [started, setStarted] = useState(false);
   const [thread, setThread] = useState(MAX_THREAD);
   const [sceneId, setSceneId] = useState("opening");
@@ -3482,3 +3481,5 @@ export default function Tealby() {
     </>
   );
 }
+
+ReactDOM.createRoot(document.getElementById("root")).render(<Tealby />);
