@@ -42,6 +42,7 @@ const SCENES = {
   // ── OPENING ──────────────────────────────────────────────
   opening: {
     nico: "neutral",
+    image: "https://raw.githubusercontent.com/Willbyshan/tealby-assets/main/bedroomscene1.png",
     prose: {
       high: [
         "Light first. Warm and golden, the kind that comes through thin curtains on a summer morning.",
