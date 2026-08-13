@@ -159,7 +159,7 @@ const SCENES = {
       ],
     },
     gainHigh: "You fold the notecard and pocket it. Evidence of something you can't name yet.",
-    threadHigh: T.GAIN_SM,
+    threadHigh: T.GAIN_MD,
   },
 
   // ── EXAMINE: WATER ───────────────────────────────────────
@@ -290,6 +290,11 @@ const SCENES = {
       ],
     },
     choices: [
+      {
+        id: "examine_grass", type: "examine", next: "examine_grass",
+        label: "Stay with the smell of cut grass",
+        thread: T.GAIN_MD,
+      },
       {
         id: "try_remember", type: "examine", next: "memory_attempt",
         label: "Try to remember how you got here",
@@ -476,7 +481,7 @@ const SCENES = {
       ],
     },
     gainHigh: "You photograph the photograph on your phone. No signal — but the camera still works.",
-    threadHigh: T.GAIN_SM,
+    threadHigh: T.GAIN_MD,
   },
 
   // ── HOBSON: WHERE ────────────────────────────────────────
@@ -692,7 +697,7 @@ const SCENES = {
       ],
     },
     gainHigh: "Giulia. You file the name quietly away.",
-    threadHigh: T.GAIN_SM,
+    threadHigh: T.GAIN_MD,
   },
 
   // ── TOE DIP: EGGS ────────────────────────────────────────
@@ -802,7 +807,7 @@ const SCENES = {
     },
     choices: [
       {
-        id: "progress_outside", type: "progress", next: "ch1_end",
+        id: "progress_outside_toast", type: "progress", next: "ch1_end",
         label: "Head outside",
         thread: 0,
       },
@@ -908,7 +913,6 @@ const SCENES = {
   stall_preserves: {
     nico: "cower",
     isFairStall: true,
-    returnTo: "fair_hub",
     prose: {
       high: [
         "The stall is immaculate. Rows of jars — jams, chutneys, pickles — arranged with the precision of someone who takes genuine pride in the work.",
@@ -932,7 +936,7 @@ const SCENES = {
     choices: [
       { id: "examine_jars", type: "examine", next: "examine_dark_jars", label: "Look at the unlabelled jars", thread: T.GAIN_MD },
       { id: "ask_rose_waste", type: "examine", next: "rose_waste", label: "\"What do you mean, everything leaves something behind?\"", thread: T.GAIN_MD },
-      { id: "preserves_back", type: "progress", next: "fair_hub", label: "← Back to the fair", thread: T.DRAIN_SM },
+      { id: "preserves_back", type: "progress", next: "fair_hub", label: "← Back to the fair", thread: 0 },
     ],
   },
 
@@ -967,7 +971,6 @@ const SCENES = {
   jar_minigame: {
     nico: "cower",
     isMiniGame: true,
-    returnTo: "stall_preserves",
     winNext: "jar_win",
     loseNext: "jar_lose",
   },
@@ -1091,7 +1094,6 @@ const SCENES = {
   stall_sweets: {
     nico: "snarl",
     isFairStall: true,
-    returnTo: "fair_hub",
     prose: {
       high: [
         "The sweet stall is bright and cheerful — paper bags, glass jars of humbugs, a hand-lettered sign reading TREAT YOURSELF.",
@@ -1117,7 +1119,7 @@ const SCENES = {
       { id: "ask_children", type: "examine", next: "hindley_children", label: "\"Where are all the children?\"", thread: T.GAIN_MD },
       { id: "ask_edge", type: "examine", next: "hindley_edge", label: "\"What are you looking at?\"", thread: T.GAIN_MD },
       { id: "take_sweet", type: "toedip", next: "hindley_sweet_taken", label: "Take a sweet", thread: T.DRAIN_SM, consumable: "hindley_sweet" },
-      { id: "sweets_back", type: "progress", next: "fair_hub", label: "← Back to the fair", thread: T.DRAIN_SM },
+      { id: "sweets_back", type: "progress", next: "fair_hub", label: "← Back to the fair", thread: 0 },
     ],
   },
 
@@ -1191,7 +1193,6 @@ const SCENES = {
   stall_keyes: {
     nico: "cower",
     isFairStall: true,
-    returnTo: "fair_hub",
     prose: {
       high: [
         "The stall is sparse. A few tools laid out on a cloth. A handwritten list of services — sharpening, mending, adjustments. Keyes & Sons, though you see no sons.",
@@ -1218,7 +1219,7 @@ const SCENES = {
       { id: "keyes_deflect", type: "examine", next: "keyes_deflected", label: "\"I'm not sure — why do you ask?\"", thread: T.GAIN_MD, hideIfConsumed: "keyes_questions" },
       { id: "keyes_challenge", type: "examine", next: "keyes_challenged", label: "\"Wait — what are you going to do with all that?\"", thread: T.GAIN_SM, requiresConsumed: "keyes_questions" },
       { id: "keyes_keys", type: "examine", next: "keyes_keyring", label: "Notice the keyring on his belt", thread: T.GAIN_MD },
-      { id: "keyes_back", type: "progress", next: "fair_hub", label: "← Back to the fair", thread: T.DRAIN_SM },
+      { id: "keyes_back", type: "progress", next: "fair_hub", label: "← Back to the fair", thread: 0 },
     ],
   },
 
@@ -1309,14 +1310,13 @@ const SCENES = {
     },
     gainHigh: "Forty keys. Bailey said she took one he wouldn't miss.",
     gainHighPre: "Forty keys. You file that away.",
-    threadHigh: 0,
+    threadHigh: T.GAIN_MD,
   },
 
   // ── THE GREEN ────────────────────────────────────────────
   the_green: {
     nico: "ignore",
     isFairStall: true,
-    returnTo: "fair_hub",
     prose: {
       high: [
         "The centre of the green is dominated by the great oak. Must be three hundred years old — the bark deeply furrowed, the canopy wide enough to shade a dozen people.",
@@ -1511,7 +1511,6 @@ const SCENES = {
   back_lane: {
     nico: "alert",
     isFairStall: true,
-    returnTo: "fair_hub",
     prose: {
       high: [
         "A narrow lane runs behind the stall row — cobblestones, brick walls, discarded crates. The sounds of the fair are muffled here.",
@@ -1574,7 +1573,6 @@ const SCENES = {
     },
     choices: [
       { id: "use_baileys_key", type: "progress", next: "storeroom_enter", label: "→ Try Bailey's key", thread: T.GAIN_MD },
-      { id: "keyed_door_back", type: "progress", next: "back_lane", label: "← Not yet", thread: 0 },
     ],
   },
 
@@ -1843,12 +1841,7 @@ const SCENES = {
       ],
     },
     choices: [
-      { id: "ch3_look_lock", type: "progress", next: "examine_lock", label: "Examine the barred door", thread: T.GAIN_MD },
-      { id: "ch3_look_crates", type: "examine", next: "examine_crates", label: "Go to the crates — where Nico is sitting", thread: 0 },
-      { id: "ch3_look_shelves", type: "examine", next: "examine_shelves", label: "Look along the shelves", thread: 0 },
-      { id: "ch3_look_sacks", type: "examine", next: "examine_sacks", label: "Check the sacks in the corner", thread: 0 },
-      { id: "ch3_look_jars", type: "examine", next: "examine_floor_jars", label: "Look at the jars on the floor", thread: 0 },
-      { id: "ch3_look_drawers", type: "examine", next: "examine_drawers", label: "Open the chest of drawers", thread: T.GAIN_MD },
+      { id: "ch3_enter_room", type: "progress", next: "ch3_hub", label: "→ Look around the storeroom", thread: 0 },
     ],
   },
 
@@ -1879,7 +1872,6 @@ const SCENES = {
   lock_minigame: {
     nico: "alert",
     isLockGame: true,
-    returnTo: "ch3_hub",
     winNext: "ch3_end",
   },
 
@@ -2604,6 +2596,26 @@ function LockMiniGame({ onWin, onLeave, inventory }) {
 }
 
 // ============================================================
+// SAVE
+// ============================================================
+const SAVE_KEY = "tealby.save.v1";
+const SAVE_VERSION = 1;
+
+function readSave() {
+  try {
+    const raw = window.localStorage.getItem(SAVE_KEY);
+    if (!raw) return null;
+    const d = JSON.parse(raw);
+    if (!d || d.v !== SAVE_VERSION || !SCENES[d.sceneId]) return null;
+    return d;
+  } catch (e) { return null; }
+}
+
+function clearSave() {
+  try { window.localStorage.removeItem(SAVE_KEY); } catch (e) { /* ignore */ }
+}
+
+// ============================================================
 // APP
 // ============================================================
 function Tealby() {
@@ -2625,15 +2637,21 @@ function Tealby() {
   const [stallsVisited, setStallsVisited] = useState(new Set());
   const [hasBaileyKey, setHasBaileyKey] = useState(false);
   const [hasRosePreserve, setHasRosePreserve] = useState(false);
-  const [sym1Solved, setSym1Solved] = useState(false); // jar
-  const [sym2Solved, setSym2Solved] = useState(false); // hourglass
-  const [sym3Solved, setSym3Solved] = useState(false); // infinity
   const [hasHourglass, setHasHourglass] = useState(false);
   const [hasMarble, setHasMarble] = useState(false);
   const [hasBirdSkull, setHasBirdSkull] = useState(false);
-  const [hasNote, setHasNote] = useState(false);
-  const [currentChapter, setCurrentChapter] = useState(1); // "chapter" | "game"
+  const [currentChapter, setCurrentChapter] = useState(1);
+  const [hasSave, setHasSave] = useState(false);
   const scrollRef = useRef(null);
+  // Snapshot of state as it stood when the current chapter began, so
+  // "Restart Chapter" can restore that chapter rather than the whole game.
+  const chapterStart = useRef(null);
+
+  // DEV scene-jump is opt-in via ?dev=1 — never exposed in the published build.
+  const devEnabled = useRef(
+    typeof window !== "undefined" &&
+    new URLSearchParams(window.location.search).has("dev")
+  ).current;
 
   const scene = SCENES[sceneId];
   const tone = threadTone(thread);
@@ -2706,6 +2724,56 @@ function Tealby() {
     }
   }, [sceneId]);
 
+  // ── SAVE / RESUME ──────────────────────────────────────────
+  // Three chapters is a long sitting to lose to an accidental refresh.
+  // Autosaves after every scene change; the title screen offers Continue.
+  useEffect(() => {
+    if (!started) return;
+    try {
+      window.localStorage.setItem(SAVE_KEY, JSON.stringify({
+        v: SAVE_VERSION, sceneId, thread, currentChapter,
+        examinedIds: [...examinedIds], consumedIds: [...consumedIds],
+        stallsVisited: [...stallsVisited],
+        hasBaileyKey, hasRosePreserve, hasHourglass, hasMarble, hasBirdSkull,
+        chapterStart: chapterStart.current ? {
+          ...chapterStart.current,
+          examinedIds: [...chapterStart.current.examinedIds],
+          consumedIds: [...chapterStart.current.consumedIds],
+          stallsVisited: [...chapterStart.current.stallsVisited],
+        } : null,
+      }));
+      setHasSave(true);
+    } catch (e) { /* private browsing / quota — play on without saving */ }
+  }, [started, sceneId, thread, currentChapter, examinedIds, consumedIds,
+      stallsVisited, hasBaileyKey, hasRosePreserve, hasHourglass, hasMarble, hasBirdSkull]);
+
+  useEffect(() => {
+    setHasSave(!!readSave());
+  }, []);
+
+  const resumeSave = () => {
+    const d = readSave();
+    if (!d) return;
+    setThread(d.thread);
+    setSceneId(d.sceneId);
+    setCurrentChapter(d.currentChapter);
+    setExaminedIds(new Set(d.examinedIds || []));
+    setConsumedIds(new Set(d.consumedIds || []));
+    setStallsVisited(new Set(d.stallsVisited || []));
+    setHasBaileyKey(!!d.hasBaileyKey);
+    setHasRosePreserve(!!d.hasRosePreserve);
+    setHasHourglass(!!d.hasHourglass);
+    setHasMarble(!!d.hasMarble);
+    setHasBirdSkull(!!d.hasBirdSkull);
+    chapterStart.current = d.chapterStart ? {
+      ...d.chapterStart,
+      examinedIds: new Set(d.chapterStart.examinedIds || []),
+      consumedIds: new Set(d.chapterStart.consumedIds || []),
+      stallsVisited: new Set(d.chapterStart.stallsVisited || []),
+    } : null;
+    setStarted(true);
+  };
+
   const applyThread = (delta) => {
     if (!delta) return;
     setThread(t => Math.max(0, Math.min(MAX_THREAD, t + delta)));
@@ -2719,12 +2787,18 @@ function Tealby() {
     setLastThreadDelta(threadDelta ?? 0);
     applyThread(threadDelta);
 
+    // Tone must be judged AFTER this choice's own delta lands, not before it.
+    // Using the stale render-time `tone` skipped scene bonuses for choices that
+    // lifted you into "high", and paid them out for choices that dropped you out.
+    const threadAfter = Math.max(0, Math.min(MAX_THREAD, thread + (threadDelta || 0)));
+    const toneAfter = threadTone(threadAfter);
+
     setTimeout(() => {
       const nextScene = SCENES[nextId];
       setSceneId(nextId);
 
       // Apply scene-level thread/gain on high tone
-      if (tone === "high") {
+      if (toneAfter === "high") {
         if (nextScene?.threadHigh) applyThread(nextScene.threadHigh);
         if (reveal) setRevealNote(reveal);
         if (gain || nextScene?.gainHigh) setGainNote(gain || nextScene.gainHigh);
@@ -2761,13 +2835,8 @@ function Tealby() {
     if (choice.id === "take_hourglass") setHasHourglass(true);
     if (choice.id === "take_marble") setHasMarble(true);
     if (choice.id === "take_skull") setHasBirdSkull(true);
-    if (choice.id === "take_note") setHasNote(true);
-    // Chapter transition
-    if (choice.next === "ch2_opening") setCurrentChapter(2);
-    if (choice.next === "ch3_opening") {
-      setCurrentChapter(3);
-      if (hasRosePreserve) setSym1Solved(true);
-    }
+    // NB: chapter transitions happen via the chapter-end overlay buttons,
+    // not through a choice — see beginChapter().
     goToScene(
       choice.next,
       choice.label,
@@ -2820,6 +2889,11 @@ function Tealby() {
     setAnimating(false);
     setDevMenuOpen(false);
     setStarted(true);
+    chapterStart.current = { chapter, entryScene: sceneId, thread,
+      examinedIds: new Set(), consumedIds: new Set(), stallsVisited: new Set(),
+      hasBaileyKey: !!withItems.baileyKey, hasRosePreserve: !!withItems.rosePreserve,
+      hasHourglass: !!withItems.hourglass, hasMarble: !!withItems.marble,
+      hasBirdSkull: !!withItems.skull };
     // Optional item grants for testing Ch3
     if (withItems.hourglass) setHasHourglass(true);
     if (withItems.marble) setHasMarble(true);
@@ -2834,57 +2908,103 @@ function Tealby() {
     goToScene(next, "You couldn't match them in time.", T.GAIN_SM, null, target?.gainHigh || null);
   };
 
-  const handleRestartChapter = () => {
-    setThread(MAX_THREAD);
-    setSceneId("opening");
+  // Clear the transient bits shared by every reset path.
+  const clearTransient = () => {
     setLastChoice(null);
     setRevealNote(null);
     setGainNote(null);
     setShowChapterEnd(false);
-    setExaminedIds(new Set());
-    setConsumedIds(new Set());
     setLastThreadDelta(null);
     setMenuOpen(false);
     setConfirmAction(null);
     setInventoryOpen(false);
+    setAnimating(false);
+  };
+
+  // Record where a chapter began so it can be replayed on its own.
+  const snapshotChapterStart = (chapter, entryScene) => {
+    chapterStart.current = {
+      chapter, entryScene, thread,
+      examinedIds: new Set(examinedIds),
+      consumedIds: new Set(consumedIds),
+      stallsVisited: new Set(stallsVisited),
+      hasBaileyKey, hasRosePreserve, hasHourglass, hasMarble, hasBirdSkull,
+    };
+  };
+
+  const beginChapter = (chapter, entryScene) => {
+    snapshotChapterStart(chapter, entryScene);
+    clearTransient();
+    setCurrentChapter(chapter);
+    setSceneId(entryScene);
+  };
+
+  // Fresh playthrough from the title screen. State setters are async, so the
+  // Chapter 1 snapshot is written explicitly rather than read back off state.
+  const startNewGame = () => {
+    clearSave();
+    setHasSave(false);
+    clearTransient();
+    setThread(MAX_THREAD);
+    setExaminedIds(new Set());
+    setConsumedIds(new Set());
     setStallsVisited(new Set());
     setHasBaileyKey(false);
     setHasRosePreserve(false);
-    setSym1Solved(false);
-    setSym2Solved(false);
-    setSym3Solved(false);
     setHasHourglass(false);
     setHasMarble(false);
     setHasBirdSkull(false);
-    setHasNote(false);
     setCurrentChapter(1);
+    setSceneId("opening");
+    chapterStart.current = {
+      chapter: 1, entryScene: "opening", thread: MAX_THREAD,
+      examinedIds: new Set(), consumedIds: new Set(), stallsVisited: new Set(),
+      hasBaileyKey: false, hasRosePreserve: false,
+      hasHourglass: false, hasMarble: false, hasBirdSkull: false,
+    };
+    setStarted(true);
+  };
+
+  // Restart the CURRENT chapter — rewind to its opening with the state the
+  // player actually had when they got there. Items and discoveries earned in
+  // earlier chapters are kept; only this chapter's progress is undone.
+  const handleRestartChapter = () => {
+    const snap = chapterStart.current;
+    clearTransient();
+    if (!snap) {
+      handleRestartGame();
+      return;
+    }
+    setThread(snap.thread);
+    setExaminedIds(new Set(snap.examinedIds));
+    setConsumedIds(new Set(snap.consumedIds));
+    setStallsVisited(new Set(snap.stallsVisited));
+    setHasBaileyKey(snap.hasBaileyKey);
+    setHasRosePreserve(snap.hasRosePreserve);
+    setHasHourglass(snap.hasHourglass);
+    setHasMarble(snap.hasMarble);
+    setHasBirdSkull(snap.hasBirdSkull);
+    setCurrentChapter(snap.chapter);
+    setSceneId(snap.entryScene);
   };
 
   const handleRestartGame = () => {
+    clearTransient();
     setStarted(false);
     setThread(MAX_THREAD);
     setSceneId("opening");
-    setLastChoice(null);
-    setRevealNote(null);
-    setGainNote(null);
-    setShowChapterEnd(false);
     setExaminedIds(new Set());
     setConsumedIds(new Set());
-    setLastThreadDelta(null);
-    setMenuOpen(false);
-    setConfirmAction(null);
-    setInventoryOpen(false);
     setStallsVisited(new Set());
     setHasBaileyKey(false);
     setHasRosePreserve(false);
-    setSym1Solved(false);
-    setSym2Solved(false);
-    setSym3Solved(false);
     setHasHourglass(false);
     setHasMarble(false);
     setHasBirdSkull(false);
-    setHasNote(false);
     setCurrentChapter(1);
+    chapterStart.current = null;
+    clearSave();
+    setHasSave(false);
   };
 
   // Inventory items — always present baseline plus acquired items
@@ -2943,14 +3063,27 @@ function Tealby() {
             There is no better guide than Nico, your faithful companion
           </div>
 
-          <button onClick={() => setStarted(true)} style={{
+          {hasSave && (
+            <button onClick={resumeSave} style={{
+              padding: "14px 40px", background: "transparent",
+              border: "1px solid #8a6e2a", borderRadius: "2px",
+              color: "#c9a84c", fontFamily: "'Cinzel', serif",
+              fontSize: "0.75rem", letterSpacing: "4px",
+              textTransform: "uppercase", cursor: "pointer",
+              marginBottom: "14px",
+            }}>
+              Continue
+            </button>
+          )}
+
+          <button onClick={startNewGame} style={{
             padding: "14px 40px", background: "transparent",
-            border: "1px solid #8a6e2a", borderRadius: "2px",
-            color: "#c9a84c", fontFamily: "'Cinzel', serif",
+            border: `1px solid ${hasSave ? "#3a5a40" : "#8a6e2a"}`, borderRadius: "2px",
+            color: hasSave ? "#9dbb9a" : "#c9a84c", fontFamily: "'Cinzel', serif",
             fontSize: "0.75rem", letterSpacing: "4px",
             textTransform: "uppercase", cursor: "pointer",
           }}>
-            Begin
+            {hasSave ? "Start again" : "Begin"}
           </button>
 
           <div style={{
@@ -3109,7 +3242,7 @@ function Tealby() {
       )}
 
       {/* DEV MENU */}
-      {devMenuOpen && (
+      {devEnabled && devMenuOpen && (
         <div style={{
           position: "fixed", inset: 0, zIndex: 200,
           background: "rgba(0,0,0,0.92)",
@@ -3208,7 +3341,7 @@ function Tealby() {
               color: "#c9a84c", letterSpacing: "2px",
             }}>THE TALE OF TEALBY</div>
             <div style={{
-              fontSize: "0.6rem", color: "#1a4028",
+              fontSize: "0.6rem", color: "#7a9a78",
               letterSpacing: "1px", textTransform: "uppercase", marginTop: "1px",
             }}>{chapterLabel}</div>
           </div>
@@ -3216,7 +3349,7 @@ function Tealby() {
           {/* Right side — inventory + thread */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "6px" }}>
             <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-              <button
+              {devEnabled && <button
                 onClick={() => setDevMenuOpen(true)}
                 aria-label="Dev menu"
                 style={{
@@ -3225,7 +3358,7 @@ function Tealby() {
                   color: "#2a5a2a", borderRadius: "2px", letterSpacing: "1px",
                   fontFamily: "'Cinzel', serif",
                 }}
-              >DEV</button>
+              >DEV</button>}
               <button
                 onClick={() => setInventoryOpen(true)}
                 aria-label="Inventory"
@@ -3379,8 +3512,8 @@ function Tealby() {
             {scene?.isExamine && (
               <button className="btn" onClick={handleReturn} disabled={animating} style={{
                 width: "100%", padding: "9px 14px", marginBottom: "6px",
-                background: "transparent", border: "1px solid #143020",
-                borderRadius: "3px", color: "#1a4028",
+                background: "transparent", border: "1px solid #2a4a34",
+                borderRadius: "3px", color: "#728f78",
                 fontSize: "0.78rem", fontFamily: "'Crimson Pro', Georgia, serif",
                 textAlign: "left", cursor: "pointer", fontStyle: "italic",
               }}>← Back</button>
@@ -3401,7 +3534,7 @@ function Tealby() {
                     background: isProgress ? "#081a10" : "#0d2318",
                     border: `1px solid ${isProgress ? "#1a3820" : "#143020"}`,
                     borderRadius: "3px",
-                    color: isProgress ? "#c9a84c" : examined ? "#1a4028" : "#7a9a78",
+                    color: isProgress ? "#c9a84c" : examined ? "#728f78" : "#9dbb9a",
                     fontSize: isProgress ? "0.92rem" : "0.85rem",
                     fontFamily: "'Crimson Pro', Georgia, serif",
                     textAlign: "left", cursor: "pointer",
@@ -3433,7 +3566,7 @@ function Tealby() {
               margin: "0 auto 24px",
             }} />
             <div style={{
-              fontSize: "0.6rem", color: "#1a4028",
+              fontSize: "0.6rem", color: "#7a9a78",
               letterSpacing: "4px", textTransform: "uppercase",
               fontFamily: "'Cinzel', serif", marginBottom: "10px",
             }}>End of {currentChapter === 1 ? "Chapter One" : currentChapter === 2 ? "Chapter Two" : "Chapter Three"}</div>
@@ -3442,14 +3575,7 @@ function Tealby() {
               fontStyle: "italic", marginBottom: "32px",
             }}>{scene?.chapterEndText}</div>
             {currentChapter === 1 ? (
-              <button onClick={() => {
-                setShowChapterEnd(false);
-                setCurrentChapter(2);
-                setSceneId("ch2_opening");
-                setLastChoice(null);
-                setRevealNote(null);
-                setGainNote(null);
-              }} style={{
+              <button onClick={() => beginChapter(2, "ch2_opening")} style={{
                 padding: "12px 32px", background: "transparent",
                 border: "1px solid #8a6e2a", borderRadius: "2px",
                 color: "#c9a84c", fontFamily: "'Cinzel', serif",
@@ -3457,14 +3583,7 @@ function Tealby() {
                 textTransform: "uppercase", cursor: "pointer",
               }}>Continue →</button>
             ) : currentChapter === 2 ? (
-              <button onClick={() => {
-                setShowChapterEnd(false);
-                setCurrentChapter(3);
-                setSceneId("ch3_opening");
-                setLastChoice(null);
-                setRevealNote(null);
-                setGainNote(null);
-              }} style={{
+              <button onClick={() => beginChapter(3, "ch3_opening")} style={{
                 padding: "12px 32px", background: "transparent",
                 border: "1px solid #8a6e2a", borderRadius: "2px",
                 color: "#c9a84c", fontFamily: "'Cinzel', serif",
@@ -3472,9 +3591,18 @@ function Tealby() {
                 textTransform: "uppercase", cursor: "pointer",
               }}>Continue →</button>
             ) : (
-              <div style={{ fontSize: "0.7rem", color: "#0f2e1c", fontStyle: "italic" }}>
-                Coming soon
-              </div>
+              <>
+                <div style={{ fontSize: "0.8rem", color: "#9a8a72", fontStyle: "italic", marginBottom: "24px" }}>
+                  Chapter Four is still being written.
+                </div>
+                <button onClick={() => { setMenuOpen(false); handleRestartGame(); }} style={{
+                  padding: "12px 32px", background: "transparent",
+                  border: "1px solid #8a6e2a", borderRadius: "2px",
+                  color: "#c9a84c", fontFamily: "'Cinzel', serif",
+                  fontSize: "0.75rem", letterSpacing: "3px",
+                  textTransform: "uppercase", cursor: "pointer",
+                }}>↺ Play again</button>
+              </>
             )}
           </div>
         )}
