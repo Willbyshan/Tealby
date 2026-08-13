@@ -8,8 +8,12 @@ const { useState, useEffect, useRef } = React;
 // ============================================================
 const MAX_THREAD = 20;
 const T = {
-  GAIN_LG: 2, GAIN_MD: 1, GAIN_SM: 0,
-  DRAIN_LG: -5, DRAIN_MD: -4, DRAIN_SM: -1,
+  // Anchored to the 20-point bar and the tone thresholds below.
+  // A toe-dip (DRAIN_MD) takes a full player straight to mid; consuming
+  // outright (DRAIN_LG) takes them straight to low. Gains are large enough
+  // that paying attention can genuinely pull her back out.
+  GAIN_LG: 6, GAIN_MD: 3, GAIN_SM: 0,
+  DRAIN_LG: -14, DRAIN_MD: -7, DRAIN_SM: -2,
 };
 
 function threadTone(t) {
@@ -45,30 +49,26 @@ const SCENES = {
     image: "https://raw.githubusercontent.com/Willbyshan/tealby-assets/main/bedroomscene1.png",
     prose: {
       high: [
-        "Light first. Warm and golden, the kind that comes through thin curtains on a summer morning.",
-        "Then weight — something pressed against your legs. Solid. Warm. Breathing slowly.",
-        "Nico.",
-        "You open your eyes.",
-        "The ceiling above you is low and beamed, plaster painted a soft cream between the timbers. A small window. Floral curtains. A bedside table with a glass of water you don't remember pouring.",
-        "You sit up.",
-        "The room is a bedroom — pretty, old-fashioned, the kind you'd find in a countryside B&B. A wardrobe. A small mirror. Your bag on the chair in the corner, placed there carefully.",
-        "Nico lifts his head. His dark eyes find yours. His white chest patch rises and falls.",
+        "The light comes through thin curtains, warm and yellow, the way it does on a summer morning when you have slept later than you meant to.",
+        "There is a weight across your legs, solid and warm and breathing slowly, and you know before you open your eyes that it is Nico.",
+        "The ceiling is low and beamed, with cream plaster between the timbers. There is a small window, curtains printed with flowers, and a bedside table holding a glass of water you do not remember pouring.",
+        "You sit up. It is a pretty room, old-fashioned in the way of a good country bed and breakfast: a wardrobe, a small mirror, your bag set carefully on the chair in the corner.",
+        "Nico lifts his head and looks at you, and his white chest rises and falls.",
         "You have no memory of arriving here.",
       ],
       mid: [
-        "Such a lovely light. The kind that makes everything feel like a postcard.",
-        "Something warm against your legs — Nico, of course. He always finds you.",
-        "You open your eyes slowly.",
-        "A beautiful little room. Low beams, cream plaster, floral curtains letting in that gorgeous golden morning. A glass of water on the bedside table — thoughtful.",
-        "Your bag is on the chair in the corner, neatly placed.",
-        "Nico raises his head and looks at you with those steady dark eyes.",
-        "You feel, somehow, like you've woken up exactly where you should be.",
+        "The light comes through thin curtains, warm and yellow, and there is a weight across your legs, which is Nico, lying exactly where he always lies.",
+        "The ceiling is low and beamed, with cream plaster between the timbers. There is a small window with flowered curtains, and a bedside table with a glass of water on it, which you suppose you poured last night and have forgotten.",
+        "You sit up. It is a pretty room, the sort of room people photograph: a wardrobe, a small mirror, your bag set neatly on the chair in the corner.",
+        "Nico lifts his head and watches you without getting up.",
+        "You cannot remember arriving. You have never been much good at the ends of long journeys, and it does not seem like the kind of thing to worry about on a morning like this.",
       ],
       low: [
-        "What a beautiful morning.",
-        "Nico is curled against your feet like he always is, like he's always been here, like this room has always been yours.",
-        "You stretch and look around at the sweet little bedroom and feel a deep, uncomplicated contentment.",
-        "Of course you're here. Where else would you be?",
+        "The light comes through the thin curtains, warm and yellow, and Nico is a weight across your legs where he belongs.",
+        "You lie still for a while and look at the beams in the ceiling, and the flowers printed on the curtains, and the glass of water somebody thought to leave out for you.",
+        "You sit up. It is a lovely room. The wardrobe, the little mirror, your bag on the chair in the corner where you put it.",
+        "Nico lifts his head and watches you, and you tell him good morning.",
+        "You cannot remember arriving, and you decide this is because you were tired, and that being tired is nothing to make a fuss about, and that you are very glad to be here.",
       ],
     },
     choices: [
@@ -89,13 +89,13 @@ const SCENES = {
       {
         id: "toedip_water", type: "toedip", next: "toedip_water",
         label: "Take a sip of the water",
-        thread: T.DRAIN_SM,
+        thread: T.DRAIN_MD,
         consumable: "water",
       },
       {
         id: "drink_water", type: "progress", next: "drank_water",
         label: "Drink the water",
-        thread: T.DRAIN_MD,
+        thread: T.DRAIN_LG,
         consumable: "water",
       },
       {
@@ -113,21 +113,22 @@ const SCENES = {
     returnTo: "opening",
     prose: {
       high: [
-        "You reach down and run your hand along Nico's flank. He's warm. Real. His ribs expand and contract under your palm.",
-        "He doesn't relax at your touch the way he usually does — that immediate melting into your hand. Instead he stays upright, watching the door.",
-        "His white toes are tucked neatly beneath him. His tail is still.",
-        "He's not frightened. He's paying attention.",
-        "That means you should be too.",
+        "You put your hand on his flank. He is warm, and his ribs move under your palm.",
+        "He does not melt into your hand the way he does at home. He stays sitting upright, with his white toes tucked underneath him and his tail quite still, and he watches the door.",
+        "He is not frightened. You have seen him frightened, at fireworks and at the vacuum cleaner, and this is not that.",
+        "This is the thing he does on a walk when he has seen something in a field a long way off and has not finished deciding about it.",
       ],
       mid: [
-        "Nico shifts as you reach for him, pressing his long nose briefly against your wrist.",
-        "He seems calm — that quiet dignity greyhounds carry everywhere.",
-        "His white chest patch catches the morning light.",
-        "Everything seems fine.",
+        "You put your hand on his flank. He is warm, and he presses his long nose briefly against your wrist.",
+        "He does not lean into your hand the way he usually does, but stays sitting upright with his toes tucked under him, watching the door.",
+        "Lurchers are like that. They are all dignity one minute and nonsense the next, and there is no telling which you will get.",
+        "His white chest catches the light from the window.",
       ],
       low: [
-        "Good boy. He's always here. He's always fine.",
-        "You stroke his silky black head and he leans into your hand.",
+        "You put your hand on his flank and he is warm, and you tell him he is a good boy, because he is.",
+        "He does not lean into your hand this morning, and he keeps his eyes on the door, but he has always been a serious dog and you love him for it.",
+        "You scratch the silky black place behind his ears and he allows it.",
+        "He is here, and you are here, and that is the whole of it.",
       ],
     },
   },
@@ -139,26 +140,29 @@ const SCENES = {
     returnTo: "opening",
     prose: {
       high: [
-        "The room is small and considered. Everything in its right place — too much in its right place, like a stage set between performances.",
-        "Your bag contains your things. Your actual things — charger, headphones, your work lanyard still clipped to the inside pocket. Someone packed for you, or you packed and don't remember it.",
-        "Your phone has no signal. Not low signal. None at all. The icon where the bars should be shows nothing.",
-        "On the dresser, propped against the mirror: a notecard. Cream paper, copperplate handwriting.",
-        "It reads: Lovely to have you back, Sarah. Breakfast is at eight. We are so glad you've come home.",
+        "The room is small and very tidy. Everything has been put where it ought to go, and then put there again, the way a stage is set before anyone comes on.",
+        "Your bag has your own things in it. The charger, the headphones, the work lanyard still clipped inside the pocket. Either somebody packed for you, or you packed and cannot remember doing it.",
+        "Your phone has no signal at all. Not one bar, or a weak bar. The space where the bars belong is empty.",
+        "There is a notecard propped against the mirror on the dresser, cream paper, written in a careful sloping hand.",
+        "It says: Lovely to have you back, Sarah. Breakfast is at eight. We are so glad you have come home.",
         "You have never been here before in your life.",
       ],
       mid: [
-        "A lovely room. Everything just so.",
-        "Your bag is here with all your things. Your phone has no signal — these old villages can be like that.",
-        "There's a notecard on the dresser. Lovely to have you back, Sarah. Breakfast is at eight.",
-        "Back. That's a funny word to use.",
-        "...Isn't it?",
+        "The room is small and very tidy, everything put exactly where it ought to go, which is more than you can say for your own house.",
+        "Your bag has your own things in it. The charger, the headphones, the work lanyard still clipped inside the pocket. You must have packed in a hurry.",
+        "Your phone has no signal. Villages like this are always dreadful for it, and you have half a mind to enjoy that.",
+        "There is a notecard propped against the mirror, cream paper, written in a careful sloping hand. Lovely to have you back, Sarah. Breakfast is at eight.",
+        "Back is a strange word for it. You turn it over once and then put it down, because the tea will be going cold somewhere and it is that sort of morning.",
       ],
       low: [
-        "Everything is just right. Your bag, your things, the little notecard.",
-        "Lovely to have you back, Sarah. Yes. Back. That feels right.",
+        "The room is small and very tidy and everything is exactly where it ought to be, which is one of the nicest things about being somewhere well kept.",
+        "Your bag has your own things in it, the charger and the headphones and your work lanyard, and you think how organised you must have been.",
+        "Your phone has no signal, and you find you are pleased about it.",
+        "There is a notecard propped against the mirror. Lovely to have you back, Sarah. Breakfast is at eight. We are so glad you have come home.",
+        "Back, it says, and home, and you read both words twice because they are kind ones, and because they are true, and because it is nice to be somewhere that knows you.",
       ],
     },
-    gainHigh: "You fold the notecard and pocket it. Evidence of something you can't name yet.",
+    gainHigh: "You fold the notecard in half and put it in your pocket, without deciding why.",
     threadHigh: T.GAIN_MD,
   },
 
@@ -169,27 +173,30 @@ const SCENES = {
     returnTo: "opening",
     prose: {
       high: [
-        "You pick it up and hold it to the light. Clear. No sediment. No colour.",
+        "You pick the glass up and hold it against the window. The water is clear, with nothing settled at the bottom and no colour in it.",
         "You bring it to your nose.",
-        "It smells of nothing. Absolutely nothing — not even the faint mineral absence-of-smell that tap water has. Just void, shaped like a glass of water.",
-        "A name surfaces from somewhere in your memory, quiet and unbidden.",
+        "It smells of nothing. Not faintly of the tap, or of the glass, or of the room. There is simply nothing there.",
+        "A name arrives in your head, quietly, without your having gone looking for it.",
         "_Aqua Tofana.",
-        "Did you hear that? Or think it?",
-        "You set the glass back on the nightstand.",
-        "Nico watches you do it. His tail does not move.",
+        "You are not sure whether you heard that or thought it.",
+        "You put the glass back on the bedside table. Nico watches you do it and his tail does not move.",
       ],
       mid: [
-        "You pick it up. Clear. Looks fine.",
-        "You bring it to your nose out of habit.",
-        "Nothing. No smell at all.",
-        "You put it down. You're not really thirsty.",
+        "You pick the glass up and hold it against the window. The water is clear and there is nothing settled at the bottom of it.",
+        "You bring it to your nose, the way you always do, without really meaning to.",
+        "There is no smell at all, which you suppose is the point of clean water, though you cannot remember it ever being quite so complete about it.",
+        "You put the glass back on the bedside table.",
+        "Nico watches you do it. You tell him you are not thirsty, which is true, and he settles back down.",
       ],
       low: [
-        "You pick it up and put it down again for no reason you can name.",
-        "It's just water.",
+        "You pick the glass up and hold it against the window and the water is beautifully clear, the way water is when it comes from somewhere with proper springs.",
+        "You bring it to your nose out of habit.",
+        "There is no smell at all, and you think what a lovely thing that is, and how the water at home always tastes of the pipes.",
+        "You put the glass back down on the bedside table without drinking any, and you could not say why.",
+        "Nico watches you do it. He is a serious dog and this is a serious morning and everything is quite as it should be.",
       ],
     },
-    revealHigh: "The water smells of nothing at all. That is not normal.",
+    revealHigh: "You have smelled tap water your whole life without ever noticing it. You notice it now, because there is nothing there to smell.",
   },
 
   // ── TOE DIP: WATER ───────────────────────────────────────
@@ -199,22 +206,28 @@ const SCENES = {
     returnTo: "opening",
     prose: {
       high: [
-        "Just a sip. Testing.",
-        "It tastes of nothing. Clean — aggressively clean. Like the idea of water rather than water itself. A void with a temperature.",
-        "You hold it in your mouth for a moment before swallowing.",
-        "Nico's head comes up from the bed. He watches with concern as you swallow, a strained whine barely audible.",
-        "You set it back on the nightstand.",
+        "You take one mouthful, to see.",
+        "It tastes of nothing. Not clean, which is a taste, and not cold, which is a feeling. There is water in your mouth and no information in it at all.",
+        "You hold it a moment before you swallow.",
+        "Nico's head comes up off the bed. He makes a small sound at the back of his throat that you have not heard him make before, and he does not take his eyes off your mouth until you have finished.",
+        "You put the glass back on the bedside table.",
       ],
       mid: [
-        "Cold. Clean. Fine.",
-        "You put it down. Nico shifts beside you.",
-        "Everything is fine.",
+        "You take one mouthful, to see.",
+        "It is cold and clean and there is nothing wrong with it, though it does not taste of very much, and you think perhaps that is what people mean by soft water.",
+        "Nico's head comes up off the bed while you swallow, and he watches you until you have finished.",
+        "You put the glass down and tell him not to be silly.",
+        "He lies back down, but he does it slowly.",
       ],
       low: [
-        "Refreshing. You almost drink the rest.",
+        "You take one mouthful, and then another, because it is very good.",
+        "It is cold and clean and it does not taste of anything at all, which is exactly how water ought to be, and you cannot think why anybody bothers with the bottled sort.",
+        "Nico's head comes up off the bed while you drink.",
+        "You tell him he is being silly, and you mean it kindly, and he lies back down.",
+        "You could quite happily finish the glass.",
       ],
     },
-    revealHigh: "It tastes of nothing. Not even water tastes of nothing.",
+    revealHigh: "Water tastes of the pipe and the glass and the place it came from. That tasted of none of those things.",
   },
 
   // ── DRANK WATER (PROGRESS) ───────────────────────────────
@@ -222,19 +235,25 @@ const SCENES = {
     nico: "neutral",
     prose: {
       high: [
-        "You drink it in four long swallows, Nico whimpering and jumping off the bed midway through your gulps.",
-        "It tastes of nothing. Clean and cold yet unsatisfying.",
-        "You set the empty glass down.",
-        "Nico is watching you from the floor. Very still. His white chest patch rises and falls.",
-        "You don't feel so good. A little nauseous even. A little bit of your usual sharp focus seemed to chip away with each gulp.",
+        "You drink it down in four long swallows. Halfway through, Nico gets off the bed.",
+        "It tastes of nothing at all. It is cold and it is wet and when it is gone you are no less thirsty than you were.",
+        "You set the empty glass on the table.",
+        "Nico is standing on the rug looking up at you, very still, his white chest rising and falling.",
+        "You do not feel well. There is a thickness behind your eyes, and the sharp clear edge you woke up with has gone off somewhere while you were drinking.",
       ],
       mid: [
-        "Delicious, actually. Crisp and cold and exactly what you needed.",
-        "You drain the glass and feel immediately more settled. More here.",
-        "What a lovely little room.",
+        "You drink it down in four long swallows, and Nico gets off the bed while you are doing it.",
+        "It is cold and clean and exactly what you wanted, and you feel better for it almost at once, more settled, more here.",
+        "You set the empty glass on the table.",
+        "Nico is standing on the rug looking up at you. You pat the bed and he does not come.",
+        "What a lovely little room this is.",
       ],
       low: [
-        "Perfect. Everything here is just perfect.",
+        "You drink it down in four long swallows and it is the best water you have ever tasted.",
+        "Nico gets off the bed while you are drinking and stands on the rug and looks up at you, and you pat the covers, and he stays where he is.",
+        "You set the empty glass down and think you might have another later.",
+        "Everything is soft this morning. The light and the bed and the sound of the village starting up outside.",
+        "You could stay here. You think you probably will.",
       ],
     },
     choices: [
@@ -253,6 +272,7 @@ const SCENES = {
         thread: 0,
       },
     ],
+      flinchLow: "For a moment you are looking at an empty glass in your hand and you cannot think why you drank it. Your heart goes hard and quick. Then it passes, and the glass is only a glass.",
   },
 
   // ── WINDOW ───────────────────────────────────────────────
@@ -261,32 +281,31 @@ const SCENES = {
     prose: {
       high: [
         "You pull back the curtain.",
-        "A village. Cobbled streets, honey-coloured stone, window boxes overflowing with late summer flowers. A green in the centre with a great oak tree. Bunting strung between lampposts — red and gold.",
-        "People move below. Setting up stalls, carrying crates, arranging things on trestle tables with quiet focused energy.",
-        "It is objectively one of the most beautiful places you have ever seen.",
-        "It is also completely silent. You can see mouths moving, people laughing, a child running — but through the glass, not a sound reaches you. Like watching a film with the audio stripped out.",
-        "Morning air drifts up through the gap at the sill.",
-        "It carries the smell of cut grass.",
+        "Below you there is a village: cobbled streets, honey-coloured stone, window boxes full of late summer flowers. There is a green in the middle with a great oak on it, and bunting in red and gold strung between the lampposts.",
+        "People are setting up stalls, carrying crates, laying things out on trestle tables, and they are all working at it with the same unhurried attention.",
+        "It is one of the most beautiful places you have ever seen.",
+        "It is also completely silent. You can see mouths moving and a child running and a woman laughing with her head back, and through the glass none of it makes any sound.",
+        "Morning air comes up through the gap at the sill. It smells of cut grass.",
         "It smells wonderful.",
-        "Wait — what? It smells *wonderful*? That doesn't sound right. You hate that smell.",
-        "You stand very still for a moment.",
-        "Nico puts his front paws on the windowsill beside you. His ears are forward.",
-        "A sign on the green reads: FINCHWICK FAIR — TOMORROW.",
+        "You stand quite still, because you hate that smell, and have hated it for as long as you can remember.",
+        "Nico puts his front paws up on the sill beside you with his ears forward. On the green, a sign reads FINCHWICK FAIR, TOMORROW.",
       ],
       mid: [
-        "Oh.",
-        "What an absolutely gorgeous village. Cobblestones, honey stone, window boxes, bunting — the kind of place you'd see on a calendar and assume wasn't real.",
-        "People bustle about below, setting up for what looks like a fair. FINCHWICK FAIR — TOMORROW, reads a sign on the green.",
-        "Morning air drifts up through the window. Something grassy and fresh.",
-        "Lovely.",
-        "Nico stands beside you at the window. His tail sways once.",
-        "You feel a rush of something warm. You're glad you're here.",
+        "You pull back the curtain.",
+        "Below you there is a village: cobbled streets, honey-coloured stone, window boxes, bunting in red and gold strung between the lampposts. It is the sort of place that turns up on a calendar and you assume has been touched up.",
+        "People are setting up stalls and carrying crates and laying things out on trestle tables for the fair.",
+        "You watch them for a while before you notice you cannot hear any of it, and then you decide the glass must be very good, because these old houses often surprise you.",
+        "Morning air comes up through the gap at the sill and it smells green and fresh and lovely.",
+        "Nico puts his front paws on the sill beside you and his tail swings once.",
+        "On the green there is a sign: FINCHWICK FAIR, TOMORROW. You find you are looking forward to it, which is not like you at all.",
       ],
       low: [
-        "Beautiful. Of course it's beautiful.",
-        "The fair tomorrow. You'd almost forgotten.",
-        "The morning air smells gorgeous. Everything here smells gorgeous.",
-        "Nico looks down at the street with you and you feel you could stay here forever.",
+        "You pull back the curtain, and the village underneath is so pretty that you keep hold of the fabric for a moment longer than you need to.",
+        "Cobbled streets and honey stone and window boxes, and bunting in red and gold going up between the lampposts for the fair tomorrow.",
+        "People are carrying crates and setting out trestle tables, and it is all quite silent, and the silence is restful, and you are glad of it.",
+        "The morning air comes up through the sill and smells of cut grass, and it is the loveliest smell in the world.",
+        "Nico puts his paws on the sill beside you and looks down at the street.",
+        "FINCHWICK FAIR, TOMORROW, says the sign on the green. You had almost forgotten. You are so pleased you will still be here for it.",
       ],
     },
     choices: [
@@ -315,26 +334,31 @@ const SCENES = {
     returnTo: "window",
     prose: {
       high: [
-        "You stand at the window and breathe in.",
-        "Cut grass. That's the smell. Fresh, green, the specific sweetness of a summer lawn newly mown.",
-        "You have hated that smell since you were seven years old. Something about it has always turned your stomach — not violently, just consistently, reliably. A small private fact about yourself you've never been able to explain.",
-        "You love it right now.",
-        "That is not right. That is not you.",
-        "Nico's ears haven't moved.",
-        "You wonder what else here has been decided for you.",
+        "You stand at the window and breathe in properly.",
+        "It is cut grass. Fresh, green, the particular sweetness of a lawn that has been mown that morning.",
+        "You have hated that smell since you were seven years old. It has always turned your stomach, not badly, but reliably, every summer of your life, and you have never been able to explain it to anybody.",
+        "You like it this morning. You like it very much.",
+        "Nico's ears do not move.",
+        "You stand there a while longer and wonder what else about you has been decided while you were asleep.",
       ],
       mid: [
-        "Cut grass. Clean and fresh.",
-        "You breathe it in and feel calm.",
-        "There's something at the back of your mind — a vague sense that this smell usually bothers you somehow.",
-        "But that can't be right. It's lovely.",
+        "You stand at the window and breathe in properly.",
+        "It is cut grass, fresh and green and sweet, and it is one of those smells that makes a person feel about nine years old.",
+        "There is something at the back of your mind that says you do not like it, that you have never liked it, and the thought will not come any further forward than that.",
+        "You breathe in again to check, and it is lovely, so the thought was probably nothing.",
+        "Nico's ears do not move.",
+        "You stay at the window a little while, feeling perfectly calm, and you could not tell anybody why you are still standing there.",
       ],
       low: [
-        "Beautiful morning. Beautiful smell.",
-        "Everything here is exactly right.",
+        "You stand at the window and breathe in properly, and it is cut grass, and it is wonderful.",
+        "Somebody has been out early with a mower, which is exactly the sort of thing they would do here, and you think how lucky you are to have woken up to it.",
+        "There is a small thought at the back of your head about hating this smell once, a long time ago, when you were a child and did not know any better.",
+        "Children hate all sorts of things for no reason. You grew out of it, evidently.",
+        "Nico's ears do not move.",
+        "You breathe in again, and again, until the thought has gone quite away, and then you feel much better.",
       ],
     },
-    revealHigh: "You hate cut grass. You always have. Someone here doesn't know that.",
+    revealHigh: "You have hated the smell of cut grass since you were seven years old. This morning you like it.",
   },
 
   // ── MEMORY ATTEMPT ───────────────────────────────────────
@@ -344,24 +368,29 @@ const SCENES = {
     returnTo: "window",
     prose: {
       high: [
-        "You sit on the edge of the bed and close your eyes.",
-        "Yesterday. What happened yesterday?",
-        "You were at home. You remember that clearly. The purple light. Brad Mondo on the telly. Nico's paws twitching, accompanied by little quiet boofs.",
+        "You sit on the edge of the bed and shut your eyes.",
+        "Yesterday. You want yesterday.",
+        "You were at home, and that part comes easily. The purple light on. Brad Mondo on the telly. Nico asleep with his paws going, making those small woofs he makes.",
         "And then.",
-        "Nothing. Not a gap, not a blur — nothing. Like a page torn cleanly out of a book. One moment home, and now here, and the space between them is simply absent.",
-        "Your chest tightens.",
-        "Nico leans his full weight against your side.",
+        "There is nothing there. Not a blur, or a muddle, or the feeling of having dozed through something. There is home, and there is this room, and between them the page has been taken out cleanly.",
+        "Your chest goes tight.",
+        "Nico leans his whole weight against your side and stays there.",
       ],
       mid: [
-        "You try. You close your eyes and reach back.",
-        "Home. The purple light. Brad Mondo. Nico boofing in his sleep.",
-        "And then here. Which doesn't quite make sense, but the village is so lovely it's hard to feel properly worried.",
-        "You'll work it out.",
-        "Nico nudges your hand.",
+        "You sit on the edge of the bed and shut your eyes and try to get yesterday back.",
+        "You were at home. The purple light on, Brad Mondo on the telly, Nico asleep with his paws going.",
+        "And then you were here, and the middle of it will not come, though you are certain it will if you leave it alone for an hour.",
+        "It is like a name you cannot reach. Pushing at it never works.",
+        "Nico leans against your side and you put your hand on his back.",
+        "The village is very pretty and it is difficult to feel properly frightened in a room this nice.",
       ],
       low: [
-        "It doesn't matter. You're here now.",
-        "Nico pushes his nose into your palm and you smile.",
+        "You sit on the edge of the bed and shut your eyes and try to remember yesterday, and nothing comes.",
+        "You were at home with the purple light on and the telly going, and then you were here, and there is no join between the two.",
+        "You think about it for a moment and then you stop, because it is a beautiful morning and there is breakfast to go down to.",
+        "People forget journeys all the time. Nobody remembers a motorway.",
+        "Nico leans his whole weight against your side.",
+        "You tell him you are perfectly all right, and you stand up, and you find that you are.",
       ],
     },
   },
@@ -372,25 +401,29 @@ const SCENES = {
     nicoNote: "The sound is very low. Mrs. Hobson does not react to it.",
     prose: {
       high: [
-        "The stairs creak pleasantly underfoot. The hallway below is papered in a small floral print — roses, faded to blush. A grandfather clock ticks in the corner.",
-        "The front door is open. Morning air drifts in, carrying the smell of something baked and beneath it, faintly, cut grass.",
-        "It still smells pleasant. It shouldn't.",
-        "A woman appears from the kitchen, wiping her hands on an apron. Perhaps sixty, round-faced, bright eyes, and the kind of smile that arrives a fraction too quickly.",
-        "— Sarah! she says, as though she's been expecting you all along. You look wonderful. Did you sleep well? You always sleep so well here.",
-        "You have never met this woman before.",
-        "Her name, embroidered on the apron in cheerful yellow thread: Hobson.",
+        "The stairs creak comfortably underfoot. The hallway is papered with small roses faded to blush, and a grandfather clock ticks in the corner.",
+        "The front door stands open. Morning air comes in with the smell of baking on it, and underneath that, faintly, cut grass.",
+        "It still smells pleasant to you. You take note of that.",
+        "A woman comes out of the kitchen drying her hands on her apron. She is perhaps sixty, round-faced, with bright eyes and a smile that arrives a little before it is needed.",
+        "— Sarah! she says, as though she has been waiting all morning and is not going to make a fuss about it. You look wonderful. Did you sleep well? You always sleep so well here.",
+        "You have never met this woman in your life.",
+        "Her name is embroidered on the apron in yellow thread. Hobson.",
       ],
       mid: [
-        "Lovely hallway. The smell of baking drifts from the kitchen, and something green and fresh from outside.",
-        "A woman bustles out — perhaps sixty, warm smile, apron embroidered Hobson.",
-        "— Sarah! she beams. You look wonderful. Did you sleep well? You always sleep so well here.",
-        "You feel immediately at ease. She has that quality.",
-        "Nico is quiet at your side.",
+        "The stairs creak comfortably underfoot. The hallway is papered with small faded roses and there is a grandfather clock ticking in the corner.",
+        "The front door stands open and the morning comes in smelling of baking and of cut grass.",
+        "A woman comes out of the kitchen drying her hands on her apron, perhaps sixty, round-faced, with a smile that gets there very quickly.",
+        "— Sarah! she says. You look wonderful. Did you sleep well? You always sleep so well here.",
+        "You do not think you have met her, but she has one of those faces, and she is so pleased to see you that it would be unkind to say so.",
+        "Her name is embroidered on the apron in yellow thread. Hobson.",
       ],
       low: [
-        "Mrs. Hobson. Of course. She's always here in the mornings.",
-        "— Sarah! You look wonderful.",
-        "You smile back. You always smile back.",
+        "The stairs creak comfortably underfoot and the hallway smells of baking and the grandfather clock is ticking in the corner where it always ticks.",
+        "The front door is open to the morning.",
+        "Mrs Hobson comes out of the kitchen drying her hands on her apron, and her name is stitched on it in yellow, and she is always here in the mornings.",
+        "— Sarah! You look wonderful. Did you sleep well? You always sleep so well here.",
+        "You tell her you did, because you did, and because she likes to hear it.",
+        "It is very nice to be somewhere where they know how you sleep.",
       ],
     },
     choices: [
@@ -433,23 +466,25 @@ const SCENES = {
     returnTo: "downstairs",
     prose: {
       high: [
-        "Eight fourteen. The second hand moves. The clock ticks.",
-        "Normal. Perfectly normal.",
-        "You look away. Then back.",
+        "Eight fourteen. The second hand is going round and the clock is ticking.",
+        "You look away, down the hall and out at the open door, and then you look back.",
         "Eight fourteen.",
-        "The second hand is still moving. The clock is still ticking.",
-        "Eight fourteen.",
+        "The second hand is still going round. The clock is still ticking.",
       ],
       mid: [
-        "Eight fourteen. A lovely old clock.",
-        "You look away and back.",
-        "Still eight fourteen. These old clocks can stick.",
+        "Eight fourteen. A handsome old clock, and it is ticking away quite happily.",
+        "You look away and then you look back, and it still says eight fourteen.",
+        "These old movements stick. Your grandmother had one that lost an hour a week and nobody ever did anything about it.",
+        "It is a shame, because it is a lovely piece.",
       ],
       low: [
-        "Eight fourteen. Time for breakfast.",
+        "Eight fourteen. Time for breakfast, then.",
+        "You look away and back and it says eight fourteen, which is right, because breakfast is at eight and you are a little late.",
+        "The clock ticks on behind you as you go down the hall.",
+        "It is a comfortable sound, a clock in a hallway. Your grandmother had one.",
       ],
     },
-    revealHigh: "The clock is ticking. The time is not changing.",
+    revealHigh: "The clock is ticking. The hands have not moved.",
   },
 
   // ── EXAMINE: PHOTOS ──────────────────────────────────────
@@ -459,28 +494,32 @@ const SCENES = {
     returnTo: "downstairs",
     prose: {
       high: [
-        "The wall is lined with framed photographs. Village scenes — the fair, the green, groups of people smiling in sunshine. Decades of them.",
-        "You scan them. And then you stop.",
-        "Near the bottom of the stairs — slightly smaller than the others, slightly older — a woman stands at the edge of a crowd. Brown hair with lighter ends, catching the sun. Your approximate height.",
-        "Your stomach does something unpleasant.",
-        "The photograph is faded. The woman is half-turned away. You cannot be certain.",
-        "But the dog beside her is black with a white chest patch, and he is looking directly at the camera with the steadiness of a creature that knows exactly what is happening.",
-        "You look down at Nico.",
-        "Nico looks up at you.",
+        "The wall going up the stairs is hung with framed photographs of the village: the fair, the green, groups of people standing in the sun. There are decades of them.",
+        "You look along the row, and then you stop.",
+        "Near the bottom, in a smaller frame than the rest and yellower than the rest, a woman is standing at the edge of a crowd. Brown hair going lighter at the ends. About your height.",
+        "The photograph is faded and she is half turned away and you could not swear to it.",
+        "The dog beside her is black with a white patch on his chest, and he is looking straight into the camera.",
+        "You look down at Nico. Nico looks up at you.",
         "— Sarah? Hobson calls from the kitchen. Eggs are ready, dear.",
       ],
       mid: [
-        "Lovely old photographs of the village.",
-        "One near the bottom catches your eye — a woman at the edge of a crowd, a black dog at her side.",
-        "Brown hair. Could be anyone, really.",
-        "— Sarah? Hobson calls. Breakfast.",
+        "The wall going up the stairs is hung with photographs of the village, the fair and the green and groups of people in the sun, going back years.",
+        "One near the bottom catches your eye. A woman at the edge of a crowd with brown hair going lighter at the ends, and a black dog beside her.",
+        "You look at it for longer than you meant to.",
+        "It could be anybody. Half the country has brown hair and a black dog, and the picture is faded, and she is turned away.",
+        "— Sarah? Hobson calls from the kitchen. Eggs are ready, dear.",
+        "You go through, and you do not look at it again on the way past.",
       ],
       low: [
-        "Pretty pictures. The village always photographs well.",
-        "— Coming! you call.",
+        "The wall going up the stairs is hung with photographs of the village and they are all lovely, the fair and the green and the people in the sun.",
+        "There is one near the bottom of a woman at the edge of a crowd with a black dog beside her, and you like it best of all of them.",
+        "She looks happy. The dog is looking right down the lens, the way dogs do when somebody has said his name.",
+        "You think how nice it is that the same families stay in a place like this, year after year, and end up on the wall.",
+        "— Sarah? Hobson calls. Eggs are ready, dear.",
+        "— Coming, you call back.",
       ],
     },
-    gainHigh: "You photograph the photograph on your phone. No signal — but the camera still works.",
+    gainHigh: "You photograph the photograph. There is no signal, but the camera works.",
     threadHigh: T.GAIN_MD,
   },
 
@@ -491,19 +530,26 @@ const SCENES = {
     returnTo: "downstairs",
     prose: {
       high: [
-        "Something flickers across Hobson's face. Fast — gone before you can name it. Then the smile is back, full wattage.",
-        "— Why, Tealby, dear. She says it like you've asked the colour of the sky. Same as always. You really did sleep deeply, didn't you?",
-        "She says the name the way you'd say home. Warm. Proprietorial.",
+        "Something crosses Hobson's face and is gone before you can put a name to it. Then the smile comes back at full strength.",
+        "— Why, Tealby, dear.",
+        "She says it the way you would tell somebody the colour of the sky.",
+        "— Same as always. You really did sleep deeply, didn't you.",
+        "She says the name the way other people say home, warmly, and as though it belongs to her.",
         "— Come and have some breakfast. Everything makes more sense after breakfast.",
       ],
       mid: [
-        "— Tealby, dear, she says cheerfully. You always ask that when you first wake up. Come and eat.",
-        "More yourself. You turn the phrase over.",
-        "She's already heading back to the kitchen.",
+        "Hobson looks at you for a moment and then laughs.",
+        "— Why, Tealby, dear. Same as always. You really did sleep deeply, didn't you.",
+        "You turn the phrase over. Same as always is a great deal to be getting on with.",
+        "— Come and have some breakfast, she says. Everything makes more sense after breakfast.",
+        "She is already going back to the kitchen, and she is probably right about the breakfast.",
       ],
       low: [
-        "— Tealby, silly. She laughs. Come and eat.",
-        "Of course. Tealby.",
+        "— Why, Tealby, dear, says Hobson, and laughs at you, kindly. Same as always.",
+        "Tealby. Of course it is.",
+        "You laugh too, because it is a silly thing to have asked, and because you like the sound of the name.",
+        "— Come and have some breakfast. Everything makes more sense after breakfast.",
+        "It always does. You follow her through.",
       ],
     },
   },
@@ -516,19 +562,27 @@ const SCENES = {
     returnTo: "downstairs",
     prose: {
       high: [
-        "Hobson tilts her head. The smile doesn't move.",
-        "— Well, you've always been a wonderful sleeper here, dear. Since your very first visit.",
-        "— My first visit, you repeat.",
-        "— Mm. She turns back to the kitchen. Come on then. The eggs won't stay warm.",
-        "She says it with such finality that it takes you a moment to notice she hasn't answered anything at all.",
+        "Hobson puts her head on one side. The smile does not move at all.",
+        "— Well, you have always been a wonderful sleeper here, dear. Since your very first visit.",
+        "— My first visit, you say.",
+        "— Mm.",
+        "She turns back to the kitchen.",
+        "— Come on then. The eggs will not stay warm.",
+        "She says it with such finality that you are halfway across the hall before you notice she has not answered anything at all.",
       ],
       mid: [
-        "— Oh, you know. You've always settled in so well here. Now come on — breakfast.",
-        "She bustles away at exactly the right moment.",
+        "Hobson puts her head on one side.",
+        "— Oh, you know. You have always settled in so well here. Since your first visit.",
+        "You open your mouth to ask which visit she means.",
+        "— Come on then, she says. The eggs will not stay warm.",
+        "She goes back to the kitchen at exactly the right moment, the way people do when they have a stove on, and the question goes out of your head somewhere between the hall and the table.",
       ],
       low: [
-        "She laughs warmly. — Come and eat, dear.",
-        "You follow her.",
+        "— Oh, you know, says Hobson, laughing. You have always settled in so well here.",
+        "That is true, and it is a nice thing to have said about you.",
+        "— Come on then. The eggs will not stay warm.",
+        "You follow her through to the kitchen.",
+        "You do like it here. You have always liked it here.",
       ],
     },
   },
@@ -540,21 +594,28 @@ const SCENES = {
     returnTo: "downstairs",
     prose: {
       high: [
-        "You smile and say nothing.",
-        "Hobson waits. A beat longer than she should need to. She is waiting for a specific response — like a line in a script she expects you to know.",
-        "When it doesn't come, her smile adjusts. Barely perceptibly.",
+        "You smile, and you say nothing.",
+        "Hobson waits. She waits a beat longer than anybody needs to, watching your mouth.",
+        "When nothing comes, the smile adjusts. Very slightly, in the way a picture is straightened.",
         "— Come and have some breakfast, dear. You look like you need it.",
-        "You've watched enough true crime to know what it means when warmth doesn't reach someone's eyes.",
+        "You have watched a great deal of true crime with your feet up on the sofa, and you know what it looks like when the warmth stops at somebody's eyes.",
       ],
       mid: [
-        "She waits just a moment. When you don't speak, she carries on.",
+        "You smile, and you say nothing.",
+        "Hobson waits, and the wait goes on a little longer than it should, and you have the odd feeling of having missed a cue.",
+        "Then she carries on as though nothing has happened.",
         "— Breakfast, then. Come on.",
+        "You follow her in. Probably she is a bit deaf, and too polite to say.",
       ],
       low: [
-        "She smiles. You smile. Everything is fine.",
+        "You smile, and she smiles, and neither of you says anything, and it is perfectly comfortable.",
+        "That is the nice thing about people who have known you a long time. You do not have to fill it.",
+        "— Breakfast, then, she says. Come on.",
+        "You follow her in.",
+        "It is going to be a lovely day.",
       ],
     },
-    revealHigh: "She was waiting for a specific response. Like she expected a script you don't have.",
+    revealHigh: "She waited. You have been waited at like that in interviews, by people who already had the answer written down in front of them.",
   },
 
   // ── BREAKFAST ────────────────────────────────────────────
@@ -562,22 +623,28 @@ const SCENES = {
     nico: "neutral",
     prose: {
       high: [
-        "The kitchen is warm and smells of toast and something richer underneath — herbs, or something older than herbs.",
-        "A small table by the window, laid for one. Scrambled eggs. Toast with butter. A pot of tea. A glass of orange juice so deeply, saturatedly orange it looks almost painted.",
-        "Hobson moves around the kitchen with the efficiency of someone who has done this a thousand times. She doesn't look at you while she talks.",
-        "— The fair's tomorrow, of course. Mr. Keyes has been helping with the setup since dawn — you know how particular he is.",
+        "The kitchen is warm and smells of toast, and under the toast of something richer, herbs, or whatever herbs are before they are herbs.",
+        "There is a small table by the window laid for one. Scrambled eggs, toast and butter, a pot of tea, and a glass of orange juice so orange it looks as though it has been painted.",
+        "Hobson moves about the kitchen the way somebody does who has done it several thousand times. She talks while she works and she does not look round at you.",
+        "— The fair is tomorrow, of course. Mr Keyes has been up since dawn with the setting out. You know how particular he is.",
         "She says it as though you do know.",
-        "Nico lies under your chair. Pressed against your feet. Not relaxed.",
+        "Under the table Nico lies across your feet, pressed hard against your ankles, and he does not settle.",
       ],
       mid: [
-        "A perfect little breakfast. Eggs, toast, tea.",
-        "Hobson chatters warmly about the fair tomorrow, about Mr. Keyes helping with the setup.",
-        "You find yourself relaxing into it. The kitchen is so warm.",
-        "Nico is under your chair.",
+        "The kitchen is warm and smells of toast and of something richer underneath it.",
+        "There is a small table by the window laid for one: scrambled eggs, toast and butter, a pot of tea, and a glass of orange juice a very good colour.",
+        "Hobson moves about the kitchen talking, and you find yourself letting it wash over you, which is not something you usually allow.",
+        "— The fair is tomorrow, of course. Mr Keyes has been up since dawn. You know how particular he is.",
+        "You do not know how particular he is, and you mean to say so, and then the tea is poured and the moment has gone.",
+        "Under the table Nico lies across your feet.",
       ],
       low: [
-        "Lovely breakfast. Lovely kitchen. Hobson's voice washes over you like warm water.",
-        "Tomorrow the fair. How wonderful.",
+        "The kitchen is warm and smells of toast and it is the nicest room in the house.",
+        "There is a small table by the window laid for one: scrambled eggs, toast and butter, a pot of tea, and a glass of orange juice the colour of a summer evening.",
+        "Hobson talks while she works and her voice goes over you like warm water, about the fair tomorrow and Mr Keyes being up since dawn and how particular he is.",
+        "He is very particular. Everybody says so.",
+        "You sit down and put your napkin across your lap.",
+        "Under the table Nico lies across your feet and will not settle, and you tell him to behave.",
       ],
     },
     choices: [
@@ -602,7 +669,7 @@ const SCENES = {
       {
         id: "toedip_eggs", type: "toedip", next: "toedip_eggs",
         label: "Try one small forkful of the eggs",
-        thread: T.DRAIN_SM,
+        thread: T.DRAIN_MD,
       },
       {
         id: "progress_eat_all", type: "progress", next: "ate_everything",
@@ -626,26 +693,29 @@ const SCENES = {
     returnTo: "breakfast",
     prose: {
       high: [
-        "Soft, perfectly set, flecked with something green — chives, you think.",
-        "They smell wonderful. Exactly as eggs should smell.",
-        "Under the table, Nico's nose appears briefly at your knee. He sniffs once toward the plate.",
-        "Then he withdraws. Lies back down.",
-        "Nico will eat anything. He's eaten week-old pesto pasta from a bin bag.",
-        "He's not interested in the eggs.",
-        "A moment later, his nose reappears — nudging toward the toast rack instead. His tail moves once.",
-        "Make of that what you will.",
+        "Soft, properly set, with something green through them. Chives, you think.",
+        "They smell exactly as scrambled eggs ought to smell.",
+        "Nico's nose comes up at your knee under the table. He sniffs once towards the plate.",
+        "Then he takes his head away and lies back down.",
+        "Nico has eaten a week-old carton of pesto pasta out of a bin bag on the pavement outside a Co-op. Nico is not a dog with standards.",
+        "A moment later his nose comes back, further along, pointing at the toast rack instead, and his tail moves once against the floor.",
       ],
       mid: [
-        "They look lovely. Soft and perfectly made.",
-        "Nico's nose appears at your knee for a moment — sniffs toward the plate, then pulls back.",
-        "Odd. He usually begs shamelessly.",
-        "He does seem interested in the toast, though.",
+        "Soft, properly set, with something green through them, and they smell exactly as they ought to.",
+        "Nico's nose comes up at your knee. He sniffs once towards the plate and then takes his head away.",
+        "That is not like him. He begs shamelessly and always has, and you have never once eaten a meal in peace.",
+        "Then his nose comes back, pointing at the toast instead, and his tail goes against the floor.",
+        "So he is hungry after all, and simply being particular, which is a new one.",
       ],
       low: [
-        "They look delicious.",
+        "Soft, properly set, with chives through them, and they smell wonderful.",
+        "Nico's nose comes up at your knee and sniffs towards the plate and then goes away again.",
+        "He wants the toast. He has always preferred toast, and he is not getting any, because it is bad for him and he knows it.",
+        "You tell him so, under the table, and he puts his chin on your foot.",
+        "You pick up your fork.",
       ],
     },
-    revealHigh: "Nico sniffed the eggs and walked away. Nico does not walk away from food.",
+    revealHigh: "Nico once ate a week-old carton of pesto pasta out of a bin bag. He sniffed the eggs and lay back down.",
   },
 
   // ── EXAMINE: JUICE ───────────────────────────────────────
@@ -656,22 +726,28 @@ const SCENES = {
     prose: {
       high: [
         "You pick up the glass.",
-        "The colour is extraordinary — deep, saturated, more orange than any juice you've ever poured yourself. Like a photograph with the contrast turned too far up.",
-        "You tilt it. It moves thickly.",
-        "Across the kitchen, a woman sits at a small side table. She has been there since you arrived. You haven't heard her say a single word.",
-        "Her glass of orange juice looks exactly the same as yours.",
-        "Her glass has not emptied.",
+        "The colour is extraordinary, deeper and more saturated than any juice you have ever poured, like a photograph with the contrast pushed too far.",
+        "You tilt it, and it moves thickly against the side.",
+        "Across the kitchen there is a woman at a small side table. She has been sitting there since you came in, and she has not said a word.",
+        "Her glass of orange juice is the same as yours.",
+        "The level in it is exactly where it was when you sat down.",
       ],
       mid: [
-        "Very orange. Probably freshly squeezed.",
-        "There's a woman at a table near the wall. Didn't notice her before. She has the same juice.",
-        "Hasn't touched it, by the looks of things.",
+        "You pick up the glass. The colour is remarkable, much deeper than the stuff from a carton, so it must be properly squeezed.",
+        "You tilt it and it moves thickly against the side.",
+        "There is a woman at a small side table across the kitchen. You had not noticed her come in, though she must have, and she has the same juice in front of her.",
+        "She has not touched it.",
+        "Some people are funny about breakfast. You put your own glass down without drinking any, which is not the same thing at all.",
       ],
       low: [
-        "Lovely colour. Very fresh looking.",
+        "You pick up the glass and hold it to the light, because it is such a lovely colour, like something out of an advertisement.",
+        "It moves thickly when you tilt it, which is how you know it is the good sort.",
+        "There is a woman at a small side table across the kitchen with the same juice in front of her.",
+        "She has not touched hers, and you think she is probably saving it, and that she looks very peaceful sitting there.",
+        "It is nice, a house where people can just sit.",
       ],
     },
-    revealHigh: "The woman at the side table has been here since you arrived. Her glass has not moved.",
+    revealHigh: "The woman at the side table has been there since you sat down. The level in her glass is exactly where it was.",
   },
 
   // ── EXAMINE: KITCHEN ─────────────────────────────────────
@@ -681,22 +757,29 @@ const SCENES = {
     returnTo: "breakfast",
     prose: {
       high: [
-        "A well-kept kitchen. Copper pots. Dried herbs hanging from a beam. A calendar on the wall — the same date circled in red, over and over.",
-        "On the shelf above the range: a row of small bottles. Dark glass. No labels.",
-        "A recipe book on the counter, spine cracked with use. You can just make out the name handwritten inside the front cover from where you're sitting.",
+        "A well-kept kitchen. Copper pans, herbs drying from a beam, a calendar on the wall with the same date ringed in red over and over again.",
+        "On the shelf above the range there is a row of small bottles in dark glass, and none of them are labelled.",
+        "There is a recipe book open on the counter with the spine gone soft from use.",
+        "From where you are sitting you can just read the name written inside the front cover.",
         "Giulia.",
-        "Just the one name. No surname.",
+        "Only the one name. Nobody has written a surname after it.",
       ],
       mid: [
-        "A lovely kitchen. Copper pots, drying herbs, very homely.",
-        "Some small dark bottles on the shelf above the range. Spices, probably.",
-        "A well-used recipe book. A name written inside — you can't quite read it from here.",
+        "A well-kept kitchen. Copper pans, herbs drying from a beam, a calendar on the wall with a date ringed in red.",
+        "On the shelf above the range there is a row of small dark bottles with no labels on them, which will be vanilla and almond and the rest, because nobody labels those.",
+        "There is a recipe book open on the counter, the spine gone soft, with a name written inside the cover that you cannot quite read from here.",
+        "You could get up and look.",
+        "You do not, because Hobson is right there, and it would be rude.",
       ],
       low: [
-        "A very nice kitchen. Warm and familiar.",
+        "A well-kept kitchen, and you love a well-kept kitchen. Copper pans and herbs drying from the beam and a calendar with a date ringed on it.",
+        "There is a row of little dark bottles above the range and a recipe book on the counter worn soft at the spine.",
+        "Somebody has cooked in this room for a very long time.",
+        "There is a name written inside the cover of the book. You cannot read it from here and it does not matter.",
+        "You sit and let the warmth of the range get into your shoulders.",
       ],
     },
-    gainHigh: "Giulia. You file the name quietly away.",
+    gainHigh: "Giulia. You say it twice in your head so that you will still have it later.",
     threadHigh: T.GAIN_MD,
   },
 
@@ -707,24 +790,30 @@ const SCENES = {
     returnTo: "breakfast",
     prose: {
       high: [
-        "Just a forkful. Testing.",
-        "The eggs are extraordinary. That's the only word — extraordinary. Rich and warm and somehow more than eggs. The taste doesn't so much land as arrive, filling something you didn't know was empty.",
+        "One forkful, to see.",
+        "The eggs are extraordinary. They are rich and warm and more than eggs, and the taste does not so much arrive as fill something you did not know was empty.",
         "You put the fork down.",
-        "Under the table, Nico is whining and pawing at your knees.",
-        "You push the plate slightly away.",
-        "Hobson, back turned, doesn't notice.",
+        "Under the table Nico is whining and putting his paws on your knee.",
+        "You push the plate an inch away from you.",
+        "Hobson has her back turned and does not see any of it.",
       ],
       mid: [
-        "Delicious. Really remarkable, actually.",
-        "Nico's head is up under the table, which is odd — Nico will eat anything.",
-        "He's not interested in the eggs.",
-        "You eat a little more anyway.",
+        "One forkful, to see.",
+        "They are extraordinary. Rich and warm and better than eggs have any business being, and you sit for a second with your eyes shut.",
+        "Under the table Nico whines and puts his paws on your knee, which he has not done since he was a puppy.",
+        "Nico will eat anything. He has never in his life objected to a plate.",
+        "You have another forkful anyway, and tell yourself you will look into it later.",
       ],
       low: [
-        "Delicious. You eat the rest happily.",
+        "One forkful, and then another, because they are the best eggs you have ever eaten.",
+        "They are rich and warm and more than eggs, and you eat the lot without stopping.",
+        "Under the table Nico whines and puts his paws on your knee and you push him down.",
+        "He is being ridiculous this morning. He has been ridiculous since you woke up.",
+        "You scrape the plate and you are still hungry.",
       ],
     },
-    revealHigh: "Nico watched the fork go to your mouth. Not the food. The fork. He doesn't want you to eat it.",
+    revealHigh: "Nico has never in his life let food get to your mouth without trying for it. He did not try. He watched your hand come back down and then put his head on your knee and left it there.",
+      flinchLow: "Your dog has his paws on your knee and you are still eating. You have never once ignored him. You put the fork down, and pick it up again, and you could not say what happened in between.",
   },
 
   // ── HOBSON ON KEYES ──────────────────────────────────────
@@ -735,23 +824,31 @@ const SCENES = {
     returnTo: "breakfast",
     prose: {
       high: [
-        "Hobson pauses at the counter. Just for a moment.",
-        "— Mr. Keyes. She says it carefully, the way you'd handle something delicate. He helps keep things running smoothly. Very dedicated. Very thorough.",
-        "— He'll be glad you're here, she adds. He always makes a point of meeting our guests.",
-        "She resumes wiping the counter. The subject, apparently, is closed.",
+        "Hobson stops at the counter. Only for a moment.",
+        "— Mr Keyes.",
+        "She says it carefully, the way you carry something you have been told is valuable.",
+        "— He helps keep things running smoothly. Very dedicated. Very thorough.",
+        "— He will be glad you are here, she says. He always makes a point of meeting our guests.",
+        "She goes back to wiping the counter, and the subject is closed.",
         "Under the table, Nico has not stopped making his sound.",
-        "Very dedicated. Very thorough. You turn the words over. They are not warm words, dressed in a warm tone.",
+        "Very dedicated. Very thorough. You turn the words over. They are not warm words, said in a warm voice.",
       ],
       mid: [
-        "— Mr. Keyes. He helps keep things running. Very thorough man.",
-        "— He'll want to meet you, she adds.",
-        "Nico shifts under your chair.",
+        "Hobson stops at the counter for a moment.",
+        "— Mr Keyes. He helps keep things running smoothly. Very dedicated. Very thorough.",
+        "— He will be glad you are here, she says. He always makes a point of meeting our guests.",
+        "Then she goes back to the counter and starts on the washing up, and you understand that you have finished talking about Mr Keyes.",
+        "Under the table Nico shifts against your feet and makes a small sound, and you press your heel down on him until he stops.",
       ],
       low: [
-        "— Mr. Keyes. Very helpful. You'll meet him soon enough.",
-        "You nod and eat your breakfast.",
+        "— Mr Keyes, says Hobson. Very helpful. You will meet him soon enough.",
+        "— He always makes a point of meeting our guests.",
+        "That is kind of him, and you say so, and Hobson looks pleased.",
+        "You go back to your breakfast.",
+        "Under the table, Nico makes a small sound against your ankle, and you press your foot down on him until he stops.",
       ],
     },
+      flinchLow: "You look down. Your foot is on your dog. He has gone quiet and he will not look at you. Something in you turns right over and you take your foot away and you cannot think of one reason you did that. Then Hobson says your name and you look up and it is gone.",
   },
 
   // ── ATE EVERYTHING ───────────────────────────────────────
@@ -759,22 +856,25 @@ const SCENES = {
     nico: "neutral",
     prose: {
       high: [
-        "You gobble up everything and gulp down the orange juice. You didn't realise how hungry you were. In fact you could swear you weren't that hungry — but once you start you cannot stop.",
-        "Afterwards the sharp unease of waking in an unknown room has softened considerably. The village outside looks less strange and more lovely. The notecard in your pocket feels less significant somehow.",
-        "Hobson collects your plate with a pleased smile.",
-        "— There. That's better, isn't it.",
-        "It isn't a question.",
+        "You eat all of it and drink the juice down, and you had not known you were hungry, and in fact you would have said you were not, and once you start you cannot stop.",
+        "Afterwards the sharpness of waking in a room you did not know has gone soft at the edges. The village out of the window looks less strange and more lovely. The notecard in your pocket does not feel like very much.",
+        "Hobson takes the plate with a pleased look.",
+        "— There. That is better, isn't it.",
+        "It is not a question.",
       ],
       mid: [
-        "Wonderful breakfast. You feel much better — grounded, calm, settled.",
-        "Hobson beams as she clears the plate.",
-        "— There. That's better, isn't it.",
-        "It really is.",
+        "You eat all of it and drink the juice down, and you had not realised how hungry you were.",
+        "Afterwards you feel steadier. The room is warm and the light is good and whatever it was that had you standing so still at the window has stopped mattering.",
+        "Hobson takes the plate with a pleased look.",
+        "— There. That is better, isn't it.",
+        "It really is, and you say so.",
       ],
       low: [
-        "Perfect. Everything here is just perfect.",
-        "— There. That's better. Hobson smiles.",
-        "Yes. Much better.",
+        "You eat all of it and drink the juice down and you would happily eat it again.",
+        "Everything is soft and warm and easy. Whatever you were fretting about upstairs has gone, and good riddance to it, because it was spoiling a lovely morning.",
+        "Hobson takes the plate with a pleased look.",
+        "— There. That is better, isn't it.",
+        "Yes. Much better. You tell her it was the best breakfast you have had in years, and she pats your shoulder on her way past.",
       ],
     },
     choices: [
@@ -784,6 +884,7 @@ const SCENES = {
         thread: 0,
       },
     ],
+      flinchLow: "You are holding a clean plate and you do not remember most of the meal. For a second you are frightened of yourself, properly frightened, the way you would be of a stranger in your kitchen. Hobson takes the plate out of your hands. You let her.",
   },
 
   // ── ATE TOAST ────────────────────────────────────────────
@@ -791,18 +892,22 @@ const SCENES = {
     nico: "neutral",
     prose: {
       high: [
-        "The toast is fine. Normal. The tea is good.",
-        "You eat and watch Hobson move around her kitchen and try to think clearly.",
-        "Something is wrong here. The notecard. The photograph. The way she talks about you as though she has a full catalogue of Sarah-facts maintained for years.",
-        "You need to get outside. Find someone who can tell you something true.",
+        "The toast is toast. The tea is good and hot and tastes of tea.",
+        "You eat, and you watch Hobson move about her kitchen, and you try to hold on to the shape of things.",
+        "The notecard. The photograph on the stairs. The way she talks about you as though she keeps a file.",
+        "You need to get outside and find somebody who will tell you something true.",
       ],
       mid: [
-        "Nice toast. Good tea. Maybe you were overthinking things.",
-        "Hobson seems kind. The village looks lovely. The morning air smells wonderful.",
-        "You should get outside and explore.",
+        "The toast is good and the tea is hot, and you eat slowly and watch Hobson move about the kitchen.",
+        "In the warm and the smell of it, this morning is beginning to look like a thing you have made too much of.",
+        "She has been nothing but kind. The village is lovely. The tea is exactly how you like it, though you do not remember saying.",
+        "You should get outside and see the place properly.",
       ],
       low: [
-        "Fine. You'll get outside and enjoy the morning.",
+        "The toast is lovely and the tea is exactly how you like it, and you cannot think how they knew.",
+        "You eat slowly and watch Hobson going about her kitchen and it is the most peaceful half hour you have had in a long time.",
+        "There is a fair tomorrow. There is a whole village out there in the sun.",
+        "You will go out and enjoy the morning, and you will not think about anything at all.",
       ],
     },
     choices: [
@@ -821,27 +926,29 @@ const SCENES = {
     chapterEndText: "Chapter Two — The Fair",
     prose: {
       high: [
-        "You step out of the B&B into the morning.",
-        "The village of Tealby surrounds you — golden stone, cobbles, the smell of something sweet drifting from a nearby stall.",
-        "And cut grass. Still sweet. Still wrong.",
-        "Nico walks at your heel. Close. His white toes click softly on the cobblestones.",
-        "The bunting snaps gently in a breeze you can't quite feel on your skin.",
-        "Somewhere behind you, a bell begins to ring.",
-        "You turn to look at the bell tower at the far end of the square.",
-        "The clock face reads eight fourteen.",
+        "You step out of the front door into the morning.",
+        "Tealby is all round you: golden stone, cobbles, something sweet cooking at a stall down the street.",
+        "And cut grass. Still sweet. You keep hold of the fact that it should not be.",
+        "Nico walks at your heel, closer than he usually bothers to, his white toes clicking on the stones.",
+        "The bunting moves in a breeze you cannot feel on your face.",
+        "Behind you a bell starts ringing, and you turn to look at the tower at the far end of the square.",
+        "The clock on it says eight fourteen.",
       ],
       mid: [
-        "You step outside into the most beautiful village morning you've ever seen.",
-        "Nico walks beside you, tail moving gently.",
-        "The fair preparations bustle cheerfully all around.",
-        "A bell rings somewhere. Soft and regular.",
-        "You feel fine. A little soft around the edges, maybe, but fine.",
+        "You step out of the front door into the morning, and it is the prettiest village morning you have ever stood in.",
+        "Golden stone, cobbles, something sweet cooking at a stall down the street, and cut grass over the top of all of it.",
+        "Nico walks at your heel, closer than usual, his white toes clicking on the stones.",
+        "The bunting moves above you, though you cannot feel any wind.",
+        "Behind you a bell starts ringing. You turn and look at the tower at the far end of the square.",
+        "Eight fourteen, says the clock. You must have been longer over breakfast than you thought.",
       ],
       low: [
-        "Tealby in the morning. Perfect.",
-        "Nico trots beside you.",
-        "The bell rings and you feel it somewhere behind your sternum — familiar, welcoming.",
-        "Home.",
+        "You step out of the front door into the morning and stand a moment on the step because it is so lovely.",
+        "Golden stone and cobbles and something sweet cooking down the street, and cut grass over everything.",
+        "Nico walks at your heel with his toes clicking on the stones, keeping very close.",
+        "The bunting moves above you. There is no wind on your face, but it is a warm day, and you do not think about it for long.",
+        "A bell starts ringing behind you and you turn and look up at the tower at the far end of the square.",
+        "Eight fourteen. Breakfast time. You have the whole day in front of you.",
       ],
     },
   },
@@ -855,21 +962,25 @@ const SCENES = {
     prose: {
       high: [
         "The fair is in full swing.",
-        "Stalls line both sides of the green, bright with bunting and hand-painted signs. The smell of hot sugar and something fried drifts across the cobblestones. Somewhere a fiddle is playing — or was. You can't hear it now.",
-        "People move through it all with the unhurried ease of a perfect summer afternoon.",
-        "The sign on the oak tree still reads: FINCHWICK FAIR — TOMORROW.",
+        "Stalls run down both sides of the green, bright with bunting and hand-painted signs, and the air over the cobbles smells of hot sugar and of something frying. Somewhere a fiddle is playing, or was playing a moment ago, and you cannot hear it now.",
+        "People move through all of it with the unhurried ease of a perfect summer afternoon.",
+        "The sign on the oak still reads FINCHWICK FAIR, TOMORROW.",
         "Nobody has taken it down. Nobody is looking at it.",
-        "Nico walks at your heel. His white toes click on the cobblestones. He does not look at the people.",
+        "Nico walks at your heel with his white toes going on the stones, and he does not look at any of them.",
       ],
       mid: [
-        "The fair is lovely. Bunting, stalls, the smell of something sugary on the warm air.",
-        "People mill around, unhurried, content.",
-        "The oak tree sign still says TOMORROW, which is a bit odd — but someone probably just forgot to change it.",
-        "Nico stays close.",
+        "The fair is in full swing, bunting and stalls the whole length of the green, and the air smells of hot sugar and frying.",
+        "Somewhere a fiddle is playing, or was, and you cannot hear it now over the crowd.",
+        "The sign on the oak still says FINCHWICK FAIR, TOMORROW, which somebody has plainly forgotten to change, and you decide not to be the person who points it out.",
+        "People move about with the unhurried ease of a perfect summer afternoon.",
+        "Nico walks at your heel and does not look at any of them, which is only sense in a crowd this size.",
       ],
       low: [
-        "What a perfect fair. Everything exactly as it should be.",
-        "Nico trots alongside you.",
+        "The fair is in full swing and it is exactly as lovely as you knew it would be.",
+        "Bunting the whole length of the green, hot sugar and frying on the air, a fiddle going somewhere behind the stalls.",
+        "The sign on the oak still says TOMORROW, and you smile at it, because whoever put it up has better things to do today than take it down.",
+        "Everyone is unhurried. Nobody is anywhere they do not want to be.",
+        "Nico walks at your heel and keeps his eyes down, and you tell him there is nothing here to worry about.",
       ],
     },
     choices: [
@@ -884,19 +995,22 @@ const SCENES = {
     isFairHub: true,
     prose: {
       high: [
-        "The fair surrounds you — noise and colour and the particular busyness of people who are not quite doing anything.",
+        "The fair goes on around you: noise and colour and the particular busyness of people who are not actually doing anything.",
         "A villager drifts past your shoulder.",
-        "— Lovely day for it, they say, to no one.",
-        "Nico doesn't look up.",
+        "— Lovely day for it, they say, to nobody.",
+        "Nico does not look up.",
       ],
       mid: [
-        "The fair hums around you. Stalls, smells, people.",
-        "Someone nearby says something about it being a lovely day.",
-        "Nico is uninterested in everyone.",
+        "The fair goes on around you, noise and colour and people moving about between the stalls.",
+        "A villager drifts past your shoulder and says it is a lovely day for it, and is past you before you can answer, which is how it goes at these things.",
+        "Nico does not look up.",
+        "You stand a moment and decide where to start.",
       ],
       low: [
-        "Wonderful. Everything wonderful.",
-        "Nico is beside you.",
+        "The fair goes on around you and you could stand in the middle of it all afternoon.",
+        "A villager drifts past your shoulder and tells you it is a lovely day for it, and it is, and you say so, though they have gone by then.",
+        "Nico does not look up. He has been sulking since the bedroom.",
+        "There is so much to see. You do not know where to start.",
       ],
     },
     choices: [
@@ -915,22 +1029,26 @@ const SCENES = {
     isFairStall: true,
     prose: {
       high: [
-        "The stall is immaculate. Rows of jars — jams, chutneys, pickles — arranged with the precision of someone who takes genuine pride in the work.",
-        "Rose is behind the counter. Perhaps forty-five, soft-faced, pleasant.",
-        "— Everything here is made from scratch, she says, without looking up. We don't believe in waste. Everything has a use. Everything leaves something behind.",
-        "At the far end of the stall, half-hidden behind a curtain: more jars. No labels. A darker colour.",
-        "Fred appears from the back. He doesn't speak. He looks at you the way you'd look at a cut of meat you were considering.",
-        "Nico has pressed himself against the backs of your knees and will not move forward.",
+        "The stall is immaculate. Rows of jars, jams and chutneys and pickles, set out with the precision of somebody who takes real pride in it.",
+        "Rose is behind the counter, perhaps forty-five, soft-faced and pleasant.",
+        "— Everything here is made from scratch, she says, without looking up. We do not believe in waste. Everything has a use. Everything leaves something behind.",
+        "At the far end of the stall, half behind a curtain, there are more jars. No labels on those, and a darker colour.",
+        "Fred comes out from the back. He does not speak. He looks at you the way you would look at a cut of meat you were deciding about.",
+        "Nico has pressed himself against the backs of your knees and will not come any further forward.",
       ],
       mid: [
-        "A lovely preserves stall. Very well arranged.",
-        "Rose is friendly, talks about making everything from scratch, not wasting anything.",
-        "Fred appears briefly. He doesn't say anything.",
-        "Nico is leaning against your legs.",
+        "The stall is immaculate, rows of jams and chutneys and pickles set out with real pride.",
+        "Rose is behind the counter, soft-faced, pleasant, and she talks while she works without looking up. Everything made from scratch. Nothing wasted. Everything leaves something behind.",
+        "There are more jars at the far end behind a curtain, unlabelled and darker, which will be the batches she has not got round to.",
+        "Fred comes out from the back and looks at you and does not say anything, and some men are like that.",
+        "Nico has pressed himself against the backs of your knees. It will be the vinegar.",
       ],
       low: [
-        "What beautiful jars. Rose is so warm.",
-        "Nico seems a bit reluctant to approach. Probably the smell.",
+        "The stall is immaculate and you tell Rose so, and she is pleased, and you talk about jam for a while.",
+        "Everything made from scratch. Nothing wasted. Everything leaves something behind, she says, and it is a nice way of putting it.",
+        "There are unlabelled jars at the far end behind a curtain and you would love to know what is in them.",
+        "Fred comes out from the back and looks at you and says nothing at all, and you decide he is shy.",
+        "Nico has pressed himself against the backs of your knees and will not come forward, and you have to reach back and pull him along by the collar.",
       ],
     },
     choices: [
@@ -947,24 +1065,30 @@ const SCENES = {
     prose: {
       high: [
         "You lean past the curtain.",
-        "The jars are darker than the others — the contents a deep, irregular brown that doesn't look like any preserve you've seen. One has something pale suspended in it. You can't tell what.",
-        "— Those aren't ready yet, Rose says, from directly behind you.",
-        "You hadn't heard her move.",
-        "— Every batch needs its time. She smiles. You can't rush these things.",
-        "She watches you look at them. Something in her expression is patient. Expectant.",
+        "These jars are darker than the others. What is inside them is a deep uneven brown that is not like any preserve you have seen, and one of them has something pale suspended in the middle of it that you cannot make out.",
+        "— Those are not ready yet, Rose says, from directly behind you.",
+        "You did not hear her move.",
+        "— Every batch needs its time. You cannot rush these things.",
+        "She stands there and watches you look at them, and she is in no hurry at all.",
       ],
       mid: [
-        "You peek at the unlabelled ones.",
-        "Something dark. Could be a chutney.",
-        "— Those aren't ready yet, Rose says pleasantly.",
+        "You lean past the curtain.",
+        "These are darker than the others, a deep uneven brown, and there is something pale suspended in one of them that you cannot make out from here.",
+        "— Those are not ready yet, Rose says, from directly behind you, and you did not hear her come over, though you were not listening for her either.",
+        "— Every batch needs its time. You cannot rush these things.",
+        "She waits while you look, which is polite of her, and you step back and say they look lovely.",
       ],
       low: [
-        "Just some jars. Probably chutney.",
+        "You lean past the curtain, because you cannot help yourself, and they are beautiful.",
+        "Darker than the others, a deep uneven brown, and one of them has something pale down in the middle of it that catches the light when you tilt your head.",
+        "— Those are not ready yet, Rose says, from directly behind you, and you laugh and tell her she caught you.",
+        "— Every batch needs its time. You cannot rush these things.",
+        "You could look at them all day. You ask when they will be ready and she says soon.",
       ],
     },
     revealHigh: "She moved without sound. The jars have something pale inside them.",
     choices: [
-      { id: "jar_game_start", type: "progress", next: "jar_minigame", label: "→ Try to match the jars — something about them won't let you look away", thread: 0, consumable: "jar_game" },
+      { id: "jar_game_start", type: "progress", next: "jar_minigame", label: "→ Try to match the jars — something about them won't let you look away", thread: T.DRAIN_SM, consumable: "jar_game" },
     ],
   },
 
@@ -981,21 +1105,28 @@ const SCENES = {
     returnTo: "stall_preserves",
     prose: {
       high: [
-        "The last pair turns. You feel something release — a pressure you hadn't noticed building.",
-        "Rose is watching you from behind the counter. She hasn't moved.",
-        "— There, she says softly. You see how it works now.",
-        "She reaches under the curtain and sets one of the dark jars in front of you.",
-        "— A gift. For someone who pays attention.",
-        "It's heavier than it should be. You put it in your bag before you can think better of it.",
-        "Nico takes one step away from you. Just one.",
+        "The last pair turns over, and something lets go in you that you had not noticed tightening.",
+        "Rose is watching you from behind the counter. She has not moved at all.",
+        "— There, she says. You see how it works now.",
+        "She reaches under the curtain and stands one of the dark jars on the counter in front of you.",
+        "— A gift. For somebody who pays attention.",
+        "It is heavier than it ought to be, and it is in your bag before you have decided anything.",
+        "Nico takes one step away from you.",
       ],
       mid: [
-        "You matched them all.",
-        "Rose smiles and slides one of the dark jars toward you.",
-        "— For paying attention, she says.",
-        "You take it. Nico steps back slightly.",
+        "The last pair turns over and something lets go in you that you had not noticed tightening.",
+        "Rose is watching from behind the counter, and she has not moved the whole time.",
+        "— There. You see how it works now. A gift, for somebody who pays attention.",
+        "She stands one of the dark jars on the counter and it is heavier than it ought to be, and you put it in your bag and thank her properly, because you were brought up to.",
+        "Nico takes one step away from you, and you tell him to pack it in.",
       ],
-      low: [ "You won. Rose gives you a jar. How nice." ],
+      low: [
+        "The last pair turns over and you are so pleased with yourself you laugh out loud.",
+        "Rose has been watching the whole time without moving, and she is smiling now.",
+        "— There. You see how it works now. A gift, for somebody who pays attention.",
+        "She stands one of the dark jars on the counter and you take it in both hands, and it is lovely and heavy, and nobody has given you anything in a long time.",
+        "Nico takes one step away from you and you do not look round at him.",
+      ],
     },
     revealHigh: "Nico stepped away from you. From you. Not from her.",
   },
@@ -1006,18 +1137,28 @@ const SCENES = {
     returnTo: "stall_preserves",
     prose: {
       high: [
-        "The last card turns. Wrong again.",
-        "You step back from the jars. Something about looking at them too long makes your eyes feel wrong.",
-        "Rose's expression doesn't change. If anything, she looks faintly amused.",
-        "— Another time, perhaps, she says, and draws the curtain closed.",
-        "Nico presses himself harder against your legs.",
+        "The last card turns over. Wrong again.",
+        "You step back from the jars. Looking at them for that long has left your eyes feeling wrong in your head.",
+        "Rose's face does not change. If anything she looks faintly amused.",
+        "— Another time, perhaps, she says, and draws the curtain across.",
+        "Nico presses harder against your legs.",
       ],
       mid: [
-        "You couldn't match them.",
-        "Rose draws the curtain. — Another time, she says.",
-        "Nico is still pressed against you.",
+        "The last card turns over, wrong again, and you step back from the jars with your eyes aching.",
+        "You had not realised how long you had been standing there.",
+        "Rose's face does not change.",
+        "— Another time, perhaps, she says, and draws the curtain across.",
+        "You are almost relieved, and you could not tell anybody why.",
+        "Nico presses harder against your legs.",
       ],
-      low: [ "You lost. Rose closes the curtain." ],
+      low: [
+        "The last card turns over, wrong again, and you are genuinely disappointed.",
+        "Your eyes ache from staring and you would start again this minute if she let you.",
+        "Rose draws the curtain across.",
+        "— Another time, perhaps.",
+        "You say you will hold her to that.",
+        "Nico presses harder against your legs and you step away from him to look at the chutneys.",
+      ],
     },
     gainHigh: "You looked away. Whatever was in those jars — you don't have it. That might be the right outcome.",
   },
@@ -1028,19 +1169,27 @@ const SCENES = {
     returnTo: "stall_preserves",
     prose: {
       high: [
-        "Rose considers the question as though it's perfectly reasonable.",
-        "— Well. When something's been here — really been here, properly — it leaves an impression. Flavour, you might say. We just know how to collect it.",
-        "She sets a jar of dark jam in front of you.",
+        "Rose considers the question as though it were an entirely reasonable one.",
+        "— Well. When something has been here, really been here, properly, it leaves an impression. Flavour, you might call it. We just know how to collect it.",
+        "She sets a jar of dark jam on the counter in front of you.",
         "— On the house. For coming back.",
-        "Nico's low sound is continuous now.",
+        "The low sound in Nico's throat has not stopped since you walked up.",
       ],
       mid: [
-        "— Oh, nothing goes to waste here. Everything contributes something. She smiles warmly.",
-        "She offers you a jar to take away.",
+        "Rose considers the question as though it were an entirely reasonable one, which is generous of her, because you are not sure it was.",
+        "— When something has been here properly, it leaves an impression. Flavour, you might call it. We just know how to collect it.",
+        "It is the sort of thing people say about their own cooking.",
+        "She sets a jar of dark jam on the counter.",
+        "— On the house. For coming back.",
+        "Nico has been making a low sound in his throat since you walked up and it has not stopped.",
       ],
       low: [
-        "— Everything has its purpose here. Rose smiles.",
-        "How nice.",
+        "Rose considers the question as though it were the most interesting thing anybody has asked her all day.",
+        "— When something has been here properly, it leaves an impression. Flavour, you might call it. We just know how to collect it.",
+        "You think that is rather beautiful, and you tell her so.",
+        "She sets a jar of dark jam on the counter.",
+        "— On the house. For coming back.",
+        "Nico is making a low sound in his throat and has been for a while, and you put your hand down and hold his muzzle shut until he stops.",
       ],
     },
     revealHigh: "\"For coming back.\" She said coming back.",
@@ -1056,17 +1205,22 @@ const SCENES = {
     returnTo: "stall_preserves",
     prose: {
       high: [
-        "It's heavier than it looks. You slip it into your bag.",
-        "Rose watches you with an expression of deep satisfaction.",
-        "— Enjoy it, she says. It's best appreciated quietly. Alone.",
-        "Nico backs away from you slightly. Just a step.",
+        "You take it and it is heavier than it looks, and Rose watches you put it away with an expression of deep satisfaction.",
       ],
       mid: [
-        "You take it. It's heavy.",
-        "Rose looks very pleased.",
-        "Nico steps back.",
+        "You take it. It is heavier than it looks.",
+        "Rose watches you put it in your bag with an expression of deep satisfaction.",
+        "— Enjoy it. It is best appreciated quietly. On your own.",
+        "That is an odd way to recommend a jam, and you are already thanking her before you have finished thinking it.",
+        "Nico backs away from you. Only a step, but he does it while looking at you, not at her.",
       ],
-      low: [ "You take the jar. Rose smiles." ],
+      low: [
+        "You take it, and it is lovely and heavy, and you hold it a moment before you put it away.",
+        "Rose watches you do it and looks very pleased.",
+        "— Enjoy it. It is best appreciated quietly. On your own.",
+        "You will. You can think of nothing nicer than sitting somewhere quiet with it.",
+        "Nico backs away from you, one step, looking at you the whole time, and you tell him not to be so silly.",
+      ],
     },
     revealHigh: "Nico stepped away from you. Not from the stall. From you.",
   },
@@ -1077,16 +1231,24 @@ const SCENES = {
     returnTo: "stall_preserves",
     prose: {
       high: [
-        "You leave it where it is.",
-        "Rose's smile doesn't change. But something behind it does.",
+        "You leave it where it is on the counter.",
+        "Rose's smile does not change. Something behind it does.",
         "— Another time, perhaps, she says.",
-        "It doesn't sound like a pleasantry.",
+        "It does not sound like a pleasantry.",
       ],
       mid: [
-        "You don't take it.",
-        "Rose smiles. — Another time.",
+        "You leave it where it is on the counter and say you could not possibly.",
+        "Rose's smile does not change, though something behind it does, and you have refused enough food from enough people to know when you have offended somebody.",
+        "— Another time, perhaps, she says.",
+        "You say yes, another time, and you mean it as a kindness.",
       ],
-      low: [ "You leave it. Rose nods." ],
+      low: [
+        "You leave it where it is, though you very nearly do not, and you feel rude about it for the rest of the afternoon.",
+        "Rose's smile does not change.",
+        "— Another time, perhaps.",
+        "You promise her another time.",
+        "It seems a shame. It was a gift and you have hurt her feelings over nothing.",
+      ],
     },
   },
 
@@ -1096,29 +1258,35 @@ const SCENES = {
     isFairStall: true,
     prose: {
       high: [
-        "The sweet stall is bright and cheerful — paper bags, glass jars of humbugs, a hand-lettered sign reading TREAT YOURSELF.",
-        "Myra Hindley is behind the counter. Early fifties, warm smile, the easy manner of someone who is very good with people.",
-        "Very good with children, specifically. You sense it the way you sense things about people sometimes, without knowing why.",
+        "The sweet stall is bright and cheerful: paper bags, glass jars of humbugs, a sign lettered by hand that reads TREAT YOURSELF.",
+        "Myra Hindley is behind the counter. Early fifties, warm smile, the easy manner of somebody who is very good with people.",
+        "Very good with children, specifically. You know it the way you sometimes know things about people, without being able to say how.",
         "There are no children at this fair.",
-        "She keeps glancing toward the edge of the green. Just for a moment. Then back to you, smile fully restored.",
-        "— They're mostly for the little ones, she says, holding out a paper bag. But you can have one. We always have enough.",
-        "Nico's snarl is very quiet. Very continuous.",
+        "She keeps glancing towards the edge of the green, only for a moment each time, and then back to you with the smile fully restored.",
+        "— They are mostly for the little ones, she says, holding out a paper bag. But you can have one. We always have enough.",
+        "Nico's snarl is very quiet and does not stop.",
       ],
       mid: [
-        "Cheerful sweet stall. Myra is warm, friendly — great with kids, you'd imagine.",
-        "No children at the fair, now that you think about it.",
-        "She offers you something from a paper bag.",
-        "Nico is making a sound.",
+        "The sweet stall is bright and cheerful, paper bags and glass jars of humbugs and a hand-lettered sign reading TREAT YOURSELF.",
+        "Myra Hindley is behind the counter, early fifties, warm, easy with people in the way that cannot be learned.",
+        "Good with children, you think, and then you notice there are no children at the fair, and then you think they will all be at school, and then you remember it is the summer.",
+        "She keeps glancing towards the edge of the green and back again.",
+        "— They are mostly for the little ones. But you can have one. We always have enough.",
+        "Nico is snarling very quietly and will not stop.",
       ],
       low: [
-        "What a lovely stall. Myra is so friendly.",
-        "She offers you a sweet. How kind.",
+        "The sweet stall is the nicest one on the green. Paper bags, glass jars of humbugs, TREAT YOURSELF in careful hand-lettering.",
+        "Myra Hindley is behind the counter and you take to her at once, the way you do with about one person a year.",
+        "She would be marvellous with children. There are no children here today, which is a shame, because they would love this.",
+        "She keeps looking off towards the edge of the green while she talks, and you look too, and there is nothing there, and you both laugh about it.",
+        "— They are mostly for the little ones. But you can have one. We always have enough.",
+        "Nico is snarling very quietly and you shorten the lead until he stops.",
       ],
     },
     choices: [
       { id: "ask_children", type: "examine", next: "hindley_children", label: "\"Where are all the children?\"", thread: T.GAIN_MD },
       { id: "ask_edge", type: "examine", next: "hindley_edge", label: "\"What are you looking at?\"", thread: T.GAIN_MD },
-      { id: "take_sweet", type: "toedip", next: "hindley_sweet_taken", label: "Take a sweet", thread: T.DRAIN_SM, consumable: "hindley_sweet" },
+      { id: "take_sweet", type: "toedip", next: "hindley_sweet_taken", label: "Take a sweet", thread: T.DRAIN_MD, consumable: "hindley_sweet" },
       { id: "sweets_back", type: "progress", next: "fair_hub", label: "← Back to the fair", thread: 0 },
     ],
   },
@@ -1129,18 +1297,25 @@ const SCENES = {
     returnTo: "stall_sweets",
     prose: {
       high: [
-        "Myra tilts her head. The smile doesn't change.",
-        "— Oh, they'll be along. They always come, eventually. We're very patient.",
-        "She begins arranging the paper bags with great attention.",
+        "Myra puts her head on one side. The smile does not change.",
+        "— Oh, they will be along. They always come, eventually. We are very patient.",
+        "She starts arranging the paper bags, giving it a great deal of attention.",
         "— Children find their way here in the end, she says. One way or another.",
-        "The subject is closed. She's already looking toward the edge of the green again.",
+        "The subject is closed. She is already looking towards the edge of the green again.",
       ],
       mid: [
-        "— Oh they'll be along. She smiles. They always come eventually.",
-        "She goes back to tidying the stall.",
+        "Myra puts her head on one side and the smile does not change.",
+        "— Oh, they will be along. They always come, eventually. We are very patient.",
+        "She starts arranging the paper bags, and gives it more attention than paper bags need.",
+        "— Children find their way here in the end. One way or another.",
+        "You wait for her to say something else and she does not, and you look at the humbugs instead.",
       ],
       low: [
-        "— Soon enough, she says pleasantly.",
+        "Myra puts her head on one side, and she has a lovely way of listening.",
+        "— Oh, they will be along. They always come, eventually. We are very patient.",
+        "— Children find their way here in the end. One way or another.",
+        "That is true of every village. They all come back sooner or later, however far they go.",
+        "She goes back to arranging her paper bags and you watch her do it, and it is very restful.",
       ],
     },
     revealHigh: "\"One way or another.\" She said it like a fact, not a hope.",
@@ -1152,18 +1327,26 @@ const SCENES = {
     returnTo: "stall_sweets",
     prose: {
       high: [
-        "She blinks. Looks at you with something that might be surprise, or might be recalibration.",
+        "She blinks. She looks at you with something that might be surprise and might be a correction being made.",
         "— Nothing, dear. Just keeping an eye on things.",
-        "You look toward the edge of the green. The tree line begins there — dark, even in the morning sun. The fair doesn't extend that far.",
+        "You look towards the edge of the green. The tree line starts there, dark even in the morning sun, and the fair does not go that far.",
         "There is nothing there.",
         "Nico is not looking at the tree line. Nico is looking at Myra.",
       ],
       mid: [
-        "— Just keeping an eye on things. She smiles.",
-        "You glance toward the trees. Nothing there.",
+        "She blinks, and there is a small pause before the answer comes.",
+        "— Nothing, dear. Just keeping an eye on things.",
+        "You look where she has been looking. The tree line starts at the edge of the green, dark even in this sun, and the stalls do not go that far.",
+        "There is nothing there, and you feel a bit foolish for asking.",
+        "Nico is not looking at the trees. Nico is looking at Myra.",
       ],
       low: [
-        "— Oh, nothing. She waves a hand.",
+        "She blinks and then laughs at herself.",
+        "— Nothing, dear. Just keeping an eye on things.",
+        "You look where she has been looking and there is only the tree line at the edge of the green, dark the way trees are.",
+        "People who run stalls are always watching for something. Weather, mostly.",
+        "You say you hope it stays fine and she says it always does.",
+        "Nico is not looking at the trees. Nico is looking at Myra, and you turn his head away with your hand.",
       ],
     },
     revealHigh: "Nico wasn't watching the tree line. He was watching her watch it.",
@@ -1175,16 +1358,22 @@ const SCENES = {
     returnTo: "stall_sweets",
     prose: {
       high: [
-        "It's very good. Sweet and sharp and a little strange — a flavour you can't quite name.",
-        "Myra watches you eat it with an expression of complete satisfaction.",
-        "— There. She says it the same way Hobson did. There.",
-        "The similarity lands somewhere unpleasant.",
+        "It is very good and a little strange, and you have it swallowed before you have finished tasting it.",
       ],
       mid: [
-        "Tastes fine. A bit odd, but nice.",
-        "Myra looks very pleased with herself.",
+        "It is very good. Sweet and sharp and a bit strange underneath, a flavour you cannot put a name to.",
+        "Myra watches you eat it with an expression of complete satisfaction.",
+        "— There, she says.",
+        "She says it exactly the way Hobson said it over the breakfast plate, the same word with the same weight on it, and the noticing lands somewhere unpleasant and stays there.",
+        "You thank her and move on, and the taste stays in your mouth for a long while.",
       ],
-      low: [ "Delicious. Myra smiles warmly." ],
+      low: [
+        "It is wonderful. Sweet and sharp and something else underneath that you cannot name and would like more of.",
+        "Myra watches you eat it and looks delighted with you.",
+        "— There, she says.",
+        "Somebody else said that recently, in that same warm way, and you cannot think who, and it does not matter.",
+        "You ask if you might have another and she gives you two.",
+      ],
     },
     revealHigh: "She said *there* the same way Hobson did. Exactly the same way.",
   },
@@ -1195,29 +1384,35 @@ const SCENES = {
     isFairStall: true,
     prose: {
       high: [
-        "The stall is sparse. A few tools laid out on a cloth. A handwritten list of services — sharpening, mending, adjustments. Keyes & Sons, though you see no sons.",
-        "Israel Keyes is behind the counter. Lean, methodical, with the stillness of someone who is always waiting for information.",
-        "— You're the guest at Hobson's, he says. It isn't a question.",
-        "He produces a small notebook. Clicks a pen.",
-        "— How long are you planning to stay? Do you have family expecting you? Are you travelling alone?",
-        "He asks the last one while already writing. As though he knows.",
-        "Nico is pressed flat against the cobblestones behind your heels.",
+        "The stall is bare. A few tools laid out on a cloth and a list of services written by hand: sharpening, mending, adjustments. Keyes & Sons, though there are no sons here.",
+        "Israel Keyes is behind the counter. Lean, methodical, with the stillness of a man who is always waiting for information.",
+        "— You are the guest at Hobson's, he says. It is not a question.",
+        "He takes out a small notebook and clicks a pen.",
+        "— How long are you planning to stay? Is there family expecting you? Are you travelling alone?",
+        "He asks the last one while he is already writing.",
+        "Nico is flat on the cobbles behind your heels.",
       ],
       mid: [
-        "Keyes is precise, efficient. He already seems to know who you are.",
-        "He asks how long you're staying. Whether anyone is expecting you.",
-        "He's writing things down.",
-        "Nico is as low to the ground as a greyhound can get.",
+        "The stall is bare. A few tools on a cloth, a hand-written list of services, Keyes & Sons with no sons anywhere about.",
+        "Israel Keyes is behind the counter, lean and methodical and very still.",
+        "— You are the guest at Hobson's, he says, and it is not a question, though in a village this size it would not need to be.",
+        "He takes out a notebook and clicks a pen. How long are you staying. Is anyone expecting you. Are you travelling alone.",
+        "He asks the last one while he is already writing, and you notice that, and you do not do anything about it.",
+        "Nico is flat on the cobbles behind your heels.",
       ],
       low: [
-        "Keyes is helpful and thorough. He asks a few questions. Very organised.",
-        "Nico doesn't like him much.",
+        "The stall is bare and businesslike, a few tools on a cloth and a list of services in a good clear hand. Keyes & Sons.",
+        "Israel Keyes is behind the counter, lean and methodical, and you like him immediately because he is not wasting anybody's time.",
+        "— You are the guest at Hobson's. Everyone knows everyone here, which is one of the nicest things about it.",
+        "He takes out a notebook and clicks a pen and asks how long you are staying, and whether anyone is expecting you, and whether you are travelling alone.",
+        "It is good of him to take an interest.",
+        "Nico is flat on the cobbles behind your heels and refuses to get up.",
       ],
     },
     choices: [
       { id: "keyes_answer", type: "toedip", next: "keyes_answered", label: "Answer his questions", thread: T.DRAIN_MD, consumable: "keyes_questions" },
       { id: "keyes_deflect", type: "examine", next: "keyes_deflected", label: "\"I'm not sure — why do you ask?\"", thread: T.GAIN_MD, hideIfConsumed: "keyes_questions" },
-      { id: "keyes_challenge", type: "examine", next: "keyes_challenged", label: "\"Wait — what are you going to do with all that?\"", thread: T.GAIN_SM, requiresConsumed: "keyes_questions" },
+      { id: "keyes_challenge", type: "examine", next: "keyes_challenged", label: "\"Wait — what are you going to do with all that?\"", thread: T.GAIN_MD, requiresConsumed: "keyes_questions" },
       { id: "keyes_keys", type: "examine", next: "keyes_keyring", label: "Notice the keyring on his belt", thread: T.GAIN_MD },
       { id: "keyes_back", type: "progress", next: "fair_hub", label: "← Back to the fair", thread: 0 },
     ],
@@ -1229,18 +1424,23 @@ const SCENES = {
     returnTo: "stall_keyes",
     prose: {
       high: [
-        "You answer. You're not sure why — the questions arrive with the weight of forms that need to be filled in.",
-        "Keyes writes everything down. Nods once.",
-        "— Good. He clicks the pen closed. We like to know who's with us.",
-        "He already knew. You realise that as soon as the words are out of his mouth.",
-        "He was checking whether you'd tell the truth.",
+        "You answer all three before you have decided to, and he writes it down, and thanks you.",
       ],
       mid: [
-        "You answer. He nods, writes it all down.",
-        "— Good. He says. We like to know.",
-        "Something about the way he says it.",
+        "You answer. You are not entirely sure why, except that the questions arrive with the weight of forms that have to be filled in, and you have always filled in forms.",
+        "Keyes writes it all down and nods once.",
+        "— Good. He clicks the pen shut. We like to know who is with us.",
+        "He knew already. You understand that the moment the words are out of your own mouth, and by then he has put the notebook away.",
+        "He was not asking. He was checking.",
       ],
-      low: [ "You answer. He nods. Very organised, this man." ],
+      low: [
+        "You answer all three, and it is a relief to be asked properly for once.",
+        "Keyes writes it all down and nods once.",
+        "— Good. We like to know who is with us.",
+        "That is exactly it. That is what has been so nice about this place from the first morning.",
+        "You tell him a bit more than he asked for, because he is easy to talk to, and he writes that down as well.",
+        "Nobody at home has ever wanted to know.",
+      ],
     },
     revealHigh: "He already knew the answers. He was checking if you'd lie.",
   },
@@ -1251,17 +1451,27 @@ const SCENES = {
     returnTo: "stall_keyes",
     prose: {
       high: [
-        "Keyes pauses. Something recalibrates behind his eyes — very slightly.",
+        "Keyes pauses. Something is adjusted behind his eyes, very slightly.",
         "— Just keeping track of our visitors. He smiles. We like everyone to feel accounted for.",
         "He does not write anything in the notebook.",
         "He puts the pen away.",
-        "The way he says *accounted for* sits wrong in your chest.",
+        "Accounted for. The phrase sits wrong in your chest and stays there.",
       ],
       mid: [
-        "— Just keeping track. He smiles and puts the notebook away.",
-        "That phrase — accounted for — lingers.",
+        "Keyes pauses, and something is adjusted behind his eyes.",
+        "— Just keeping track of our visitors. We like everyone to feel accounted for.",
+        "He does not write anything down. He puts the pen away, which he did not do while you were answering.",
+        "Accounted for is not the phrase you would have chosen.",
+        "You say you should get on, and he does not stop you.",
       ],
-      low: [ "— Just being thorough. He smiles." ],
+      low: [
+        "Keyes pauses.",
+        "— Just keeping track of our visitors. We like everyone to feel accounted for.",
+        "He puts the pen away without writing anything, and you are sorry to have been difficult.",
+        "Accounted for. That is a kind way of putting it. Somewhere there is a list with your name on it and somebody would notice if you were not on it.",
+        "Nobody at home keeps a list.",
+        "You tell him you will come back when you have more time.",
+      ],
     },
     revealHigh: "\"Accounted for.\" He closed the notebook. You gave him nothing and he accepted that. For now.",
   },
@@ -1272,19 +1482,27 @@ const SCENES = {
     returnTo: "stall_keyes",
     prose: {
       high: [
-        "Keyes looks up from the notebook. Fully, for the first time.",
-        "— Record keeping, he says. This is a community. We look after one another. It helps to know who's among us.",
-        "He holds your gaze for a moment longer than is comfortable.",
-        "— You'd be surprised how often people are grateful someone kept track.",
-        "He clicks the pen closed and slides the notebook under the counter.",
-        "You don't feel grateful.",
+        "Keyes looks up from the notebook. Properly, for the first time.",
+        "— Record keeping, he says. This is a community. We look after one another. It helps to know who is among us.",
+        "He holds your eye for a beat longer than is comfortable.",
+        "— You would be surprised how often people are grateful somebody kept track.",
+        "He clicks the pen shut and slides the notebook under the counter.",
+        "You are not grateful.",
       ],
       mid: [
-        "— Record keeping. He meets your eyes. We look after each other here.",
-        "He puts the notebook away.",
-        "Something about *we look after each other* doesn't sit right.",
+        "Keyes looks up from the notebook, properly, for the first time.",
+        "— Record keeping. This is a community. We look after one another. It helps to know who is among us.",
+        "He holds your eye a beat longer than he needs to.",
+        "— You would be surprised how often people are grateful somebody kept track.",
+        "He slides the notebook under the counter. You did not see what was already written in it.",
       ],
-      low: [ "— Just keeping records. He smiles." ],
+      low: [
+        "Keyes looks up from the notebook, properly, for the first time, and answers you straight.",
+        "— Record keeping. This is a community. We look after one another. It helps to know who is among us.",
+        "— You would be surprised how often people are grateful somebody kept track.",
+        "You can imagine. You have been in enough places where nobody kept track of anything.",
+        "You apologise for the tone of the question and he waves it away, and you part on good terms.",
+      ],
     },
     revealHigh: "\"You'd be surprised how often people are grateful.\" He said it like a warning dressed as a comfort.",
   },
@@ -1295,18 +1513,27 @@ const SCENES = {
     returnTo: "stall_keyes",
     prose: {
       high: [
-        "It's substantial. A heavy iron ring with perhaps forty keys on it — old ones, modern ones, padlock keys, cabinet keys, at least three that look like they belong to something large.",
+        "It is a substantial thing. A heavy iron ring with perhaps forty keys on it, old ones and modern ones, padlock keys, cabinet keys, three at least that belong to something large.",
         "He notices you looking.",
         "— I like to be prepared, he says.",
-        "He turns slightly so the keyring is behind him.",
-        "Forty keys. You file that away.",
+        "He turns a little, so that the keyring is behind him.",
+        "Forty keys. You put it away where you can find it again.",
       ],
       mid: [
-        "A very large keyring. Lots of keys.",
-        "He turns slightly when he catches you looking.",
-        "— Prepared, he says.",
+        "A heavy iron ring on his belt with perhaps forty keys on it. Old ones, modern ones, padlock keys, cabinet keys, three at least for something large.",
+        "He notices you looking.",
+        "— I like to be prepared.",
+        "Then he turns a little, so the keyring is behind him, and goes on talking.",
+        "A man who mends things would have keys. That is most of what mending is.",
+        "Forty of them, though.",
       ],
-      low: [ "He has a lot of keys. Very organised." ],
+      low: [
+        "There is a heavy iron ring on his belt with a great many keys on it, and you say he must be trusted with half the village.",
+        "— I like to be prepared, he says, and turns a little so it is behind him.",
+        "That is exactly the sort of man you want in a place like this. Somebody who can get into anything if there is a reason to.",
+        "You have never been organised enough to keep more than three keys.",
+        "You tell him so and he laughs, and it is the first time you have heard him do it.",
+      ],
     },
     gainHigh: "Forty keys. Bailey said she took one he wouldn't miss.",
     gainHighPre: "Forty keys. You file that away.",
@@ -1319,29 +1546,32 @@ const SCENES = {
     isFairStall: true,
     prose: {
       high: [
-        "The centre of the green is dominated by the great oak. Must be three hundred years old — the bark deeply furrowed, the canopy wide enough to shade a dozen people.",
-        "A group of villagers stand near its base. Facing inward. They haven't moved since you arrived.",
-        "A man drifts past, cup of tea in hand.",
-        "— The fair's on tomorrow, he says cheerfully, to no one in particular.",
-        "You look around at the bunting, the stalls, the crowds.",
-        "_Tomorrow?_",
-        "Nico sniffs at the man's shoe.",
-        "He raises his leg and marks his territory as if the man's leg were a wooden post.",
-        "The man does not move. Does not flinch. Does not look down.",
-        "He continues talking to nobody, not breaking stride.",
+        "The middle of the green is taken up by the great oak. Three hundred years old at least, the bark deeply furrowed, the canopy wide enough to shade a dozen people.",
+        "A group of villagers are standing at the base of it, facing inward. They have not moved since you arrived.",
+        "A man goes past with a cup of tea in his hand.",
+        "— The fair is on tomorrow, he says cheerfully, to nobody in particular.",
+        "You look at the bunting, and the stalls, and the crowd.",
+        "_Tomorrow.",
+        "Nico sniffs at the man's shoe, then lifts his leg and marks him as though he were a fence post.",
+        "The man does not move, or flinch, or look down. He carries on talking to nobody without breaking stride.",
         "— Lovely day for it.",
       ],
       mid: [
-        "A lovely old oak at the centre of the green.",
-        "Some people standing near it, not doing much.",
-        "A man walks past. — The fair's on tomorrow! he says.",
-        "You look around at the ongoing fair.",
-        "Tomorrow.",
-        "Nico is completely uninterested in everyone here.",
+        "The middle of the green is taken up by the great oak, three hundred years old at least, the canopy wide enough for a dozen people.",
+        "A group of villagers stand at the base of it facing inward, and they have not moved since you arrived, and you decide it is some sort of club.",
+        "A man goes past with a cup of tea.",
+        "— The fair is on tomorrow, he says, to nobody in particular.",
+        "You look at the bunting and the stalls and the crowd, and you nearly say something.",
+        "Nico sniffs at the man's shoe and then lifts his leg and marks him like a fence post, and the man does not move or look down or stop talking.",
+        "You apologise to his back and pull Nico away, mortified.",
       ],
       low: [
-        "Beautiful old tree. The fair hums around you.",
-        "Nico is behaving himself.",
+        "The great oak takes up the middle of the green, three hundred years old and beautiful, wide enough to shade a dozen people.",
+        "A group of villagers are standing at the base of it facing inward. They have been there since you arrived. You would like to know what they are looking at.",
+        "A man goes past with a cup of tea and tells you the fair is on tomorrow, and you say you cannot wait.",
+        "Nico sniffs at the man's shoe and lifts his leg and marks him like a fence post.",
+        "The man does not move or look down or stop talking, which is very good of him.",
+        "You do not apologise, because he has not noticed, and you take Nico away by the collar.",
       ],
     },
     choices: [
@@ -1357,27 +1587,36 @@ const SCENES = {
     returnTo: "the_green",
     prose: {
       high: [
-        "The bark is covered in carvings. Names — dozens of them, some old and weathered into the wood, some newer. Initials. Full names. Dates beside some of them.",
-        "You scan them the way you'd scan a memorial.",
-        "And then you stop.",
-        "Third from the bottom. Fresh enough that the wood is still pale inside the cut.",
+        "The bark is covered in carvings. Names, dozens of them, some weathered right into the wood and some newer. Initials. Full names. Dates beside a few.",
+        "You go along them the way you would go along a memorial.",
+        "Then you stop.",
+        "Third from the bottom, cut recently enough that the wood inside the cut is still pale.",
         "SARAH.",
-        "No surname. No date. Just Sarah, and below it, two small marks you can't interpret.",
+        "No surname and no date. Only Sarah, and under it two small marks you cannot read.",
         "Nico puts his paw on your foot.",
       ],
       mid: [
-        "Names carved into the bark. Lots of them, going back years.",
-        "One near the bottom looks recent.",
-        "Sarah. Your name.",
-        "Could be anyone.",
-        "...Could be anyone.",
+        "The bark is covered in carvings. Names, dozens of them, some weathered into the wood and some newer, with dates beside a few.",
+        "You go along them the way you would go along a memorial, and then you stop.",
+        "Third from the bottom, cut recently enough that the wood inside it is still pale.",
+        "SARAH. No surname, no date, and two small marks underneath that you cannot read.",
+        "It is not an unusual name. There must be four in this village alone, and you know two at home.",
+        "Nico puts his paw on your foot.",
       ],
       low: [
-        "Lots of old carvings. Lovely old tree.",
+        "The bark is covered in carvings and you could stand here reading them for an hour. Names going back decades, initials, dates.",
+        "It is a lovely thing, a tree people put themselves on.",
+        "Third from the bottom, cut recently enough that the wood is still pale inside it: SARAH.",
+        "You put your fingers in it and smile. Somebody with your name has stood exactly where you are standing.",
+        "There are two small marks underneath that you cannot read, and you decide they are hers too.",
+        "Nico puts his paw on your foot and you step off it.",
       ],
     },
     gainHigh: "Your name is on this tree. You don't remember carving it.",
     threadHigh: T.GAIN_LG,
+      choices: [
+      { id: "carve_name", type: "toedip", next: "oak_name_carved", label: "Add yours", thread: T.DRAIN_LG, consumable: "carved" },
+    ],
   },
 
   hollow_circle: {
@@ -1386,27 +1625,37 @@ const SCENES = {
     returnTo: "the_green",
     prose: {
       high: [
-        "You approach.",
-        "There are six of them, standing in a rough circle facing inward. None of them speaking. None of them looking at each other.",
-        "One turns toward you as you get close.",
-        "— We're so glad you came, they say.",
-        "It turns back inward.",
-        "Nico sits down beside you and begins cleaning his paw.",
+        "You go over.",
+        "There are six of them standing in a rough circle facing inward. None of them speaking. None of them looking at each other.",
+        "One turns towards you as you come up.",
+        "— We are so glad you came, it says.",
+        "It turns back.",
+        "Nico sits down beside you and starts cleaning his paw.",
       ],
       mid: [
-        "Six people in a rough circle, not really doing anything.",
-        "One of them tells you they're glad you came.",
-        "Nico sits down and ignores them completely.",
+        "You go over. There are six of them in a rough circle facing inward, not speaking, not looking at one another.",
+        "One turns towards you as you come up.",
+        "— We are so glad you came.",
+        "Then it turns back, and that is the whole of it.",
+        "You stand at the edge of them waiting to be included and you are not, and after a while it stops being uncomfortable.",
+        "Nico sits down beside you and starts cleaning his paw.",
       ],
       low: [
-        "A friendly little group. So glad you came.",
+        "You go over, because they look like they are in the middle of something and you would like to be in the middle of something too.",
+        "Six of them in a rough circle facing inward. Nobody speaking. Nobody looking at anybody.",
+        "One turns towards you as you come up.",
+        "— We are so glad you came.",
+        "That is a lovely thing to say to somebody you have never met, and you say so, and it turns back.",
+        "You stand at the edge of them for a while and it is very peaceful.",
+        "Nico sits down beside you and starts cleaning his paw.",
       ],
     },
     choices: [
+      { id: "circle_join", type: "toedip", next: "circle_joined", label: "Step into the gap and turn inward", thread: T.DRAIN_MD, consumable: "joined_circle" },
       { id: "circle_speak", type: "examine", next: "circle_speak_to", label: "Try to speak to one of them", thread: 0 },
       { id: "circle_wave", type: "examine", next: "circle_wave_at", label: "Wave at the nearest one", thread: 0 },
       { id: "circle_closing", type: "examine", next: "circle_ask_closing", label: "\"What's the closing?\"", thread: T.GAIN_MD },
-      { id: "circle_nico", type: "examine", next: "circle_nico_shoe", label: "Watch what Nico does", thread: 0 },
+      { id: "circle_nico", type: "examine", next: "circle_nico_shoe", label: "Watch what Nico does", thread: T.GAIN_MD },
     ],
   },
 
@@ -1418,17 +1667,26 @@ const SCENES = {
       high: [
         "— Excuse me, you say.",
         "The nearest one turns.",
-        "— Have you tried the preserves? they say.",
+        "— Have you tried the preserves? it says.",
         "It turns back.",
-        "You wait.",
-        "Nothing more comes.",
+        "You wait. Nothing else comes.",
       ],
       mid: [
-        "You try talking to one.",
-        "— Have you tried the preserves? they say.",
-        "That's apparently it.",
+        "— Excuse me, you say.",
+        "The nearest one turns.",
+        "— Have you tried the preserves?",
+        "Then it turns back, and you wait, and nothing else comes.",
+        "Some people are hard work at a party. You have been that person yourself on a bad evening.",
+        "You try once more and get the same sentence, word for word, at the same speed.",
       ],
-      low: [ "— Have you tried the preserves?" ],
+      low: [
+        "— Excuse me, you say.",
+        "The nearest one turns.",
+        "— Have you tried the preserves?",
+        "You say that you have, and that they were wonderful, and that Rose is a marvel.",
+        "It turns back before you have finished.",
+        "You do not mind. It is a fair and everyone has somewhere to be, and it was nice of them to recommend something.",
+      ],
     },
   },
 
@@ -1440,16 +1698,24 @@ const SCENES = {
       high: [
         "You wave.",
         "One of them turns and looks directly at your hand.",
-        "— Lovely day for it, they say.",
+        "— Lovely day for it, it says.",
         "It turns back.",
         "You lower your hand.",
       ],
       mid: [
-        "You wave. One looks at you.",
-        "— Lovely day for it.",
-        "Back to facing inward.",
+        "You wave.",
+        "One of them turns and looks at your hand rather than at your face, which is an odd thing to do, and says it is a lovely day for it.",
+        "Then it turns back.",
+        "You lower your hand and feel about nine years old.",
+        "Nobody at the fair has looked at your face all morning, now you think of it.",
       ],
-      low: [ "— Lovely day for it." ],
+      low: [
+        "You wave, and one of them turns and looks straight at your hand and says it is a lovely day for it.",
+        "It is a lovely day for it. Everyone keeps saying so and everyone is right.",
+        "It turns back before you can answer.",
+        "You lower your hand and stand with them a while longer.",
+        "There is no need to talk. That is rather the point of a day like this.",
+      ],
     },
   },
 
@@ -1459,20 +1725,33 @@ const SCENES = {
     returnTo: "hollow_circle",
     prose: {
       high: [
-        "— What's the closing? you ask. What does that mean?",
+        "— What is the closing? you ask. What does that mean?",
         "The one nearest you turns.",
-        "— You'll want to stay for the closing, they say.",
+        "— You will want to stay for the closing, it says.",
         "It turns back.",
-        "You stare at the back of its head.",
+        "You stand there looking at the back of its head.",
       ],
       mid: [
-        "You ask about the closing.",
-        "— You'll want to stay for the closing, one of them says.",
-        "Not helpful.",
+        "— What is the closing? you ask. What does that mean?",
+        "The one nearest you turns.",
+        "— You will want to stay for the closing.",
+        "Then it turns back, and you ask again, and you get the same sentence in the same voice.",
+        "You are being told something. You are not being told what.",
+        "You stand there looking at the back of its head.",
       ],
-      low: [ "— You'll want to stay for the closing." ],
+      low: [
+        "— What is the closing? you ask.",
+        "The one nearest you turns.",
+        "— You will want to stay for the closing.",
+        "Whatever it is, everyone is clearly looking forward to it, and you would hate to be the only one who missed it.",
+        "You ask again and get the same answer, and you laugh, because they are all in on something and will not spoil it.",
+        "You will find out this evening.",
+      ],
     },
     revealHigh: "You asked directly. They just repeated the line. Like they only have the one.",
+      choices: [
+      { id: "agree_closing", type: "toedip", next: "closing_agreed", label: "Tell them you will stay for it", thread: T.DRAIN_MD, consumable: "agreed_closing" },
+    ],
   },
 
   circle_nico_shoe: {
@@ -1481,27 +1760,30 @@ const SCENES = {
     returnTo: "hollow_circle",
     prose: {
       high: [
-        "Nico stands, stretches, and wanders toward the nearest figure with the air of a dog with absolutely no agenda.",
+        "Nico stands up, stretches, and wanders over to the nearest figure with the air of a dog who has no plans at all.",
         "He sniffs at its shoe.",
-        "He raises his leg and marks his territory as if the figure's leg were a wooden post.",
-        "The figure does not move. Does not flinch. Does not look down.",
-        "— We're so glad you came, they say, to the middle distance.",
+        "Then he lifts his leg and marks it as though it were a fence post.",
+        "The figure does not move, or flinch, or look down.",
+        "— We are so glad you came, it says, to the middle distance.",
         "A single tear runs down its cheek.",
         "Its smile does not change.",
-        "Nico trots back to you and sits on your foot.",
+        "Nico trots back and sits on your foot.",
       ],
       mid: [
-        "Nico wanders over to the nearest one.",
-        "He sniffs at its shoe. Then raises his leg — deliberate, unhurried — and marks it.",
-        "They say they're glad you came.",
-        "A tear runs down its face.",
-        "It keeps smiling.",
-        "Nico comes back and sits on your foot.",
+        "Nico stands up, stretches, and wanders over to the nearest figure like a dog with no plans at all.",
+        "He sniffs at its shoe, and then he lifts his leg and marks it, unhurried, the way he would a fence post.",
+        "The figure does not move or flinch or look down.",
+        "— We are so glad you came, it says, to the middle distance.",
+        "One tear goes down its cheek while it is saying it, and the smile does not change at all.",
+        "Nico trots back and sits on your foot, and you do not tell him off.",
       ],
       low: [
-        "Nico does something a bit rude.",
-        "The person doesn't seem to notice.",
-        "Odd.",
+        "Nico wanders over to the nearest one and does something extremely rude against its leg, and you are so embarrassed you could put your hands over your face.",
+        "The figure does not move or flinch or look down.",
+        "— We are so glad you came, it says, to nobody in particular.",
+        "One tear goes down its cheek while it says it, and the smile does not change.",
+        "Hay fever, probably. Half the county has it this time of year.",
+        "Nico trots back and sits on your foot and you push him off.",
       ],
     },
     revealHigh: "It cried. Just the one tear, just the one time, while it smiled and said nothing real. Something is still in there.",
@@ -1513,18 +1795,22 @@ const SCENES = {
     isFairStall: true,
     prose: {
       high: [
-        "A narrow lane runs behind the stall row — cobblestones, brick walls, discarded crates. The sounds of the fair are muffled here.",
-        "Quieter. More real, somehow, than the green.",
-        "At the far end: a door set into the wall. Heavy oak, iron fittings, no sign. It looks like it belongs to something older than the buildings around it.",
-        "Nico's ears are fully forward. He's interested in the door, but not distressed. Like he's filing it away.",
+        "A narrow lane runs along behind the row of stalls. Cobbles, brick walls, crates left where they were put down. The sound of the fair is muffled back here.",
+        "It is quieter. It is more real than the green, and you could not say why.",
+        "At the far end there is a door set into the wall. Heavy oak, iron fittings, no sign on it. It looks as though it belongs to something older than the buildings on either side of it.",
+        "Nico's ears are right forward. He is interested in the door and he is not frightened of it, and he is putting it away for later.",
       ],
       mid: [
-        "A quiet little back lane. Crates, brick walls.",
-        "There's a door at the far end. Looks old.",
-        "Nico sniffs toward it.",
+        "A narrow lane runs behind the row of stalls. Cobbles, brick walls, crates left where somebody put them down.",
+        "The fair sounds a long way off back here, and you find you are breathing more easily than you were on the green.",
+        "At the far end there is a door set into the wall, heavy oak with iron fittings and no sign on it, and it looks older than the buildings either side of it.",
+        "Nico's ears are right forward and he is watching it steadily, and he is not frightened.",
       ],
       low: [
-        "A quiet lane. A door. Probably just storage.",
+        "A narrow lane behind the stalls, cobbles and brick and a few crates. You are not really supposed to be down here.",
+        "The fair sounds a long way off, and after all that noise the quiet is lovely.",
+        "There is a door at the far end, heavy oak with iron fittings, older than the buildings either side of it. Storage, most likely.",
+        "Nico's ears are right forward and he will not take his eyes off it, and you tell him there is nothing in there but crates.",
       ],
     },
     choices: [
@@ -1539,17 +1825,24 @@ const SCENES = {
     returnTo: "back_lane",
     prose: {
       high: [
-        "Old oak, iron fittings, a keyhole that looks like it's been used recently — the metal around it worn bright.",
-        "No handle on this side. Just the keyhole.",
-        "You try pushing it. It doesn't move.",
+        "Old oak, iron fittings, and a keyhole with the metal worn bright around it from use.",
+        "There is no handle on this side. Only the keyhole.",
+        "You push it. It does not move.",
         "Nico sits down in front of it, perfectly still, and looks at you.",
       ],
       mid: [
-        "Solid door. Locked.",
-        "Nico sits in front of it and looks up at you.",
-        "No obvious way in.",
+        "Old oak and iron fittings, and a keyhole with the metal worn bright around it, which means somebody uses it often.",
+        "There is no handle on this side at all. Only the keyhole.",
+        "You push it and it does not give, and you had not really expected it to.",
+        "Nico sits down in front of it, perfectly still, and looks at you until you look back.",
       ],
-      low: [ "Locked. Nothing to be done." ],
+      low: [
+        "Old oak and iron fittings and a keyhole worn bright with use. Somebody is in and out of here all the time.",
+        "No handle on this side. You push it anyway and it does not move.",
+        "It will be where they keep the trestle tables.",
+        "Nico sits down in front of it and will not come away, and you have to pull him.",
+        "There is a whole fair back there and he wants to sit in a lane and look at a door.",
+      ],
     },
   },
 
@@ -1561,15 +1854,23 @@ const SCENES = {
     prose: {
       high: [
         "The door. The keyhole worn bright.",
-        "You have Bailey's key.",
-        "Nico stands up from where he was sitting and presses his nose to the gap at the bottom of the door.",
+        "You have Bailey's key in your hand.",
+        "Nico gets up from where he has been sitting and puts his nose to the gap along the bottom of the door.",
         "His tail moves. Once.",
       ],
       mid: [
-        "The door. You have Bailey's key now.",
-        "Nico sniffs the gap at the bottom.",
+        "The door, and the keyhole worn bright, and Bailey's key in your hand.",
+        "Nico gets up from where he has been sitting and puts his nose to the gap along the bottom of the door.",
+        "His tail moves once, which it has not done since the bedroom.",
+        "You stand with the key in your fingers and do not put it in yet.",
       ],
-      low: [ "The door. The key. Worth a try." ],
+      low: [
+        "The door, and the key that woman gave you, which you are still not sure you should have taken.",
+        "Nico gets up and puts his nose to the gap along the bottom and his tail moves once.",
+        "It is somebody's storeroom. You would not want a stranger going through yours.",
+        "Still. He wants to. And there is nothing else down this lane.",
+        "You turn the key over in your fingers.",
+      ],
     },
     choices: [
       { id: "use_baileys_key", type: "progress", next: "storeroom_enter", label: "→ Try Bailey's key", thread: T.GAIN_MD },
@@ -1581,18 +1882,25 @@ const SCENES = {
     prose: {
       high: [
         "The key turns.",
-        "A sound like something exhaling — pressure releasing — and the door swings inward on a darkness that smells of cold stone and something older.",
-        "Stone steps lead down.",
-        "Nico doesn't wait. He steps through first, his white chest patch disappearing into the dark.",
-        "You stand at the threshold.",
+        "There is a sound like something letting a breath out, and the door swings inward on a darkness that smells of cold stone and of something older than that.",
+        "Stone steps go down.",
+        "Nico does not wait. He goes through first and his white chest goes out of sight into the dark.",
+        "You stand on the threshold.",
       ],
       mid: [
-        "The key works.",
-        "The door opens onto stone steps going down.",
-        "Nico goes first.",
-        "You stand at the top of the steps.",
+        "The key turns, and there is a sound like something letting a breath out, and the door swings inward.",
+        "Cold stone, and under it something older, and stone steps going down out of the light.",
+        "Nico does not wait for you. He goes through first and his white chest disappears into it.",
+        "You stand on the threshold with your hand still on the key.",
+        "It is a cellar. Every old building has one.",
       ],
-      low: [ "It opens. Steps going down. Nico is already ahead." ],
+      low: [
+        "The key turns and the door lets out a breath and swings inward on stone steps going down.",
+        "It smells of cold stone and of something underneath that.",
+        "Nico does not wait. He is through and gone before you can get hold of his collar.",
+        "You stand on the threshold and call him and he does not come back.",
+        "You have never known him do that. You will have to go down after him.",
+      ],
     },
     choices: [
       { id: "ch3_confirm_back", type: "progress", next: "fair_hub", label: "← Wait. I'm not finished up here.", thread: 0 },
@@ -1605,28 +1913,32 @@ const SCENES = {
     nico: "wag",
     prose: {
       high: [
-        "She's sitting on an upturned crate at the mouth of the back lane, eating an apple and watching the fair with the relaxed attention of someone at a theatre.",
-        "She clocks you from twenty feet away. Doesn't look surprised.",
-        "— You've got the look, she says, by way of greeting.",
-        "She's perhaps thirty, dark-haired, layers of mismatched jewellery, a coat that's too heavy for the weather and covered in pockets. She gestures at the stalls with her apple.",
-        "— The look of someone who knows something's wrong even when everything looks fine. I've been waiting for someone with that look.",
-        "Nico walks directly up to her and pushes his long nose into her hand.",
-        "He's never done that to anyone here.",
-        "— Hello, lovely, she says to him, completely unfazed. Good dog. Very smart dog.",
+        "She is sitting on an upturned crate at the mouth of the back lane, eating an apple and watching the fair with the relaxed attention of somebody at the theatre.",
+        "She clocks you from twenty feet off and does not look surprised.",
+        "— You have got the look, she says, instead of hello.",
+        "She is perhaps thirty, dark-haired, wearing layers of mismatched jewellery and a coat far too heavy for the weather with a great many pockets in it. She waves the apple at the stalls.",
+        "— The look of somebody who knows something is wrong even when everything looks fine. I have been waiting for one of those.",
+        "Nico walks straight up to her and pushes his long nose into her hand.",
+        "He has not done that to anybody here.",
+        "— Hello, lovely, she says to him. Good dog. Very smart dog.",
         "She looks back up at you.",
         "— Sit down. We should talk.",
       ],
       mid: [
-        "A woman at the edge of the back lane. Didn't notice her before.",
-        "She's watching the fair like it's something to be studied.",
-        "— You've got the look, she says. You know something's off.",
-        "Nico goes straight to her. He seems to like her.",
+        "She is sitting on an upturned crate at the mouth of the back lane, eating an apple, watching the fair like somebody at the theatre.",
+        "She clocks you from twenty feet off and does not look surprised.",
+        "— You have got the look, she says, instead of hello. Like somebody who knows something is wrong even when everything looks fine.",
+        "She is perhaps thirty, dark-haired, in a great deal of mismatched jewellery and a coat much too heavy for the weather.",
+        "Nico walks straight up to her and pushes his nose into her hand, which he has not done to anybody else all day.",
         "— Sit down, she says. We should talk.",
       ],
       low: [
-        "A woman near the back lane. Friendly enough.",
-        "Nico likes her.",
-        "— Sit down, she says.",
+        "There is a woman on an upturned crate at the mouth of the back lane, eating an apple and watching everybody.",
+        "She is about thirty, dark-haired, wearing far too many necklaces and a coat much too heavy for the day.",
+        "— You have got the look, she says, instead of hello.",
+        "You do not know what she means and you are not sure you like the way she says it, sitting there judging a fair that has done nothing to her.",
+        "Nico goes straight to her and puts his nose in her hand, the traitor.",
+        "— Sit down, she says. We should talk.",
       ],
     },
     choices: [
@@ -1643,21 +1955,28 @@ const SCENES = {
     returnTo: "bailey_first",
     prose: {
       high: [
-        "— This place, she says, gesturing at everything, feeds on something. I don't know exactly what — I've seen things like it before, different shapes — but people go *thin* here. Like something is eating the most important parts of them.",
-        "She takes a bite of her apple.",
-        "— Those people at the fair? The ones who just stand around saying lovely day for it?",
+        "— This place, she says, and waves the apple at all of it, feeds on something. I do not know exactly what. I have seen things like it before in different shapes. But people go *thin* here. Like something is eating the parts of them that matter.",
+        "She takes a bite.",
+        "— Those ones out there. The ones who stand about saying lovely day for it.",
         "She draws a finger across her temple.",
-        "— Gone. Whatever made them *them* — it's been eaten. They're just the leftover.",
+        "— Gone. Whatever made them themselves has been eaten. What is walking round out there is the packaging.",
         "She looks at you steadily.",
-        "— You're not gone yet. You should probably keep it that way.",
+        "— You are not gone yet. I would keep it that way.",
       ],
       mid: [
-        "— This place feeds on people. Not their bodies — something else. Whatever makes them *them*.",
-        "She nods at the people milling around the stalls.",
-        "— Those ones are already empty.",
-        "— You're not. Yet.",
+        "— This place feeds on something, she says. Not bodies. I have seen things like it before in different shapes. People go *thin* here.",
+        "She waves the apple at the villagers moving between the stalls.",
+        "— Those ones are already empty. Whatever made them themselves has been eaten.",
+        "It is a horrible thing to say about people who have been nothing but pleasant to you all morning, and you say so.",
+        "— You are not gone yet, she says, as though that settles it. I would keep it that way.",
       ],
-      low: [ "— Something's not right here. She seems very sure about that." ],
+      low: [
+        "— This place feeds on something, she says. People go thin here.",
+        "She waves her apple at the villagers, who are having a perfectly nice afternoon and have done nothing to deserve it.",
+        "— Those ones are already empty.",
+        "You tell her that is a dreadful thing to say. Rose has been kind to you. Myra has been kind to you. Mrs Hobson made you breakfast.",
+        "She looks at you for a long moment and does not argue, which is somehow worse.",
+      ],
     },
     revealHigh: "The people at the fair aren't strange visitors. They're what's left after the feeding.",
   },
@@ -1668,17 +1987,24 @@ const SCENES = {
     returnTo: "bailey_first",
     prose: {
       high: [
-        "— Bailey. She says it like it's the end of the sentence.",
-        "— I travel. She pauses, choosing words. Between places. I find things, borrow things, move on before things get complicated.",
-        "She examines her apple.",
-        "— This place got complicated faster than usual.",
+        "— Bailey. She says it as though it finishes the sentence.",
+        "— I travel. She stops and picks the words. Between places. I find things, borrow things, and move on before it gets complicated.",
+        "She turns the apple over, looking for somewhere to start again.",
+        "— This one got complicated quicker than usual.",
       ],
       mid: [
-        "— Bailey. I travel.",
-        "She's not exactly forthcoming with the details.",
-        "— This place got complicated, she adds.",
+        "— Bailey. She says it as though it finishes the sentence, and it does not.",
+        "— I travel. Between places. I find things, borrow things, move on before it gets complicated.",
+        "You wait for the rest of it and there is no rest of it.",
+        "— This one got complicated quicker than usual, she says, and starts on the other side of the apple.",
       ],
-      low: [ "— Bailey. Just passing through." ],
+      low: [
+        "— Bailey. I travel. I find things, borrow things, move on before it gets complicated.",
+        "Borrow. You notice the word she has chosen and what it is standing in for.",
+        "She is a woman with no fixed address going through other people's villages, telling the people who live there that they are empty.",
+        "— This one got complicated quicker than usual, she says.",
+        "You would like to get back to the fair.",
+      ],
     },
   },
 
@@ -1690,19 +2016,33 @@ const SCENES = {
       high: [
         "She gives you a long look.",
         "— The same way you did, probably. The same way you always do.",
-        "— I don't know how I got here, you say.",
-        "— I know. She stands up, brushes apple core off her coat. That's the thing about this place — it finds you when you're in the dark. When you're fading. When the edges of you have gone soft.",
-        "She looks at you with something careful in her expression.",
-        "— You've been here before. I can tell. You've got the residue of it.",
-        "She says it matter-of-factly, without cruelty.",
-        "— More than once, I'd guess.",
+        "— I do not know how I got here, you say.",
+        "— I know.",
+        "She stands up and brushes the apple core off her coat.",
+        "— That is the thing about this place. It finds you when you are in the dark. When you are fading. When the edges of you have gone soft.",
+        "She looks at you carefully.",
+        "— You have been here before. I can tell. You have got the residue of it on you.",
+        "She says it plainly, without any cruelty in it.",
+        "— More than once, I would say.",
       ],
       mid: [
-        "— Same way you did, she says.",
-        "— This place finds you when you're fading. When the edges go soft.",
-        "— You've been here before, she adds. I can tell.",
+        "She gives you a long look.",
+        "— The same way you did, probably. The same way you always do.",
+        "— I do not know how I got here, you say.",
+        "— I know.",
+        "She stands and brushes the apple off her coat.",
+        "— It finds you when you are in the dark. When you are fading. When the edges of you have gone soft.",
+        "— You have been here before. I can tell. More than once, I would say.",
+        "You want to ask what she means by fading and you do not, because you already know, and because the fair is very loud behind her.",
       ],
-      low: [ "— Hard to explain, she says. You've probably been here before though." ],
+      low: [
+        "— The same way you did, probably. The same way you always do.",
+        "— I do not know how I got here, you say.",
+        "— I know. It finds you when you are in the dark. When you are fading. When the edges of you have gone soft.",
+        "Then she tells you that you have been here before, more than once, which she cannot possibly know.",
+        "It is the sort of thing people say when they want you to think they can see into you.",
+        "You stand up and tell her you are going back to the fair.",
+      ],
     },
     revealHigh: "She can see the residue of previous visits. She said more than once.",
   },
@@ -1712,28 +2052,32 @@ const SCENES = {
     isChapterKey: true,
     prose: {
       high: [
-        "She reaches into one of her coat's many pockets and produces a key. Old iron, heavy, the bow worn smooth.",
-        "— Borrowed it off the repair man. Keyes. He's got about forty keys on him — very suspicious if you ask me, which you should, ask me things — he won't notice one missing.",
+        "She goes into one of the many pockets and comes out with a key. Old iron, heavy, the bow worn smooth.",
+        "— Borrowed it off the repair man. Keyes. He has got about forty on him, which I think is very suspicious, and you should ask me things. He will not miss one.",
         "She holds it out.",
-        "— There's a door in the back lane. That key opens it. I tried it myself, didn't go in alone. I steal things, I don't have a death wish.",
-        "You take the key. It's heavier than it looks.",
-        "— The dog, she says, nodding at Nico. Keep him close. I mean it. He knows exactly where he is and he knows exactly what matters. When it counts — follow him.",
-        "She stands, pockets her hands.",
-        "— I don't know how to get out of this place. But I think you might be able to work it out. You've been here before. Somewhere in there — she taps her temple gently — you already know the answer.",
-        "She gives you one last look. Appraising, warm, a little sad.",
-        "— Don't eat anything else.",
+        "— There is a door in the back lane. That opens it. I tried it myself and did not go in on my own. I steal things. I do not have a death wish.",
+        "You take it. It is heavier than it looks.",
+        "— The dog, she says, nodding at Nico. Keep him close. I mean it. He knows exactly where he is and he knows exactly what matters. When it counts, go where he goes.",
+        "She stands and puts her hands in her pockets.",
+        "— I do not know how to get out of this place. I think you might. You have been here before. Somewhere in there, she says, and taps her own temple gently, you already have the answer.",
+        "She gives you one last look, weighing you up, warm, and a little sad.",
+        "— Do not eat anything else.",
       ],
       mid: [
-        "She produces a key. Took it from Keyes — he won't notice, apparently.",
-        "There's a door in the back lane. This opens it.",
-        "She didn't go in alone and isn't about to start.",
-        "— Keep the dog close, she says. He knows what he's doing.",
-        "She thinks you've been here before. She thinks you might know how to get out, even if you don't know it yet.",
-        "— Don't eat anything else, she adds.",
+        "She goes into one of the many pockets and produces a key. Old iron, heavy, the bow worn smooth.",
+        "— Borrowed it off the repair man. He has got forty on him. He will not miss one.",
+        "— There is a door in the back lane. That opens it. I tried it myself and did not go in alone, because I steal things, I do not have a death wish.",
+        "You take it and it is heavier than it looks.",
+        "— Keep the dog close. He knows exactly where he is and what matters. When it counts, go where he goes.",
+        "— I do not know how to get out of here. I think you might. And do not eat anything else.",
       ],
       low: [
-        "She gives you a key. Door in the back lane.",
-        "Keep the dog close. Don't eat anything else.",
+        "She produces a key out of one of her pockets. Old iron, heavy, worn smooth at the bow.",
+        "— Borrowed it off the repair man. He has got forty on him. He will not miss one.",
+        "Borrowed. She has stolen a man's key and is handing it to you in an alley and telling you to let yourself into somewhere that is not yours.",
+        "You take it, because it would be awkward not to, and it is heavier than it looks.",
+        "— Keep the dog close. Go where he goes. And do not eat anything else.",
+        "You will not be doing any of that. You have had a lovely day and this woman has been the only unpleasant part of it.",
       ],
     },
     choices: [
@@ -1749,18 +2093,21 @@ const SCENES = {
     returnTo: "bailey_gives_key",
     prose: {
       high: [
-        "— Dogs like him — she considers it — they don't get confused by places like this. They can't be fooled because they don't use the parts of their brain this place messes with.",
+        "— Dogs like him, she says, and thinks about it. They do not get confused by places like this. They cannot be fooled, because they are not using the parts of the brain this place gets into.",
         "She looks at Nico.",
-        "— He can't tell you what's real with words. But he can show you. He's been showing you the whole time.",
-        "Nico looks up at her. His tail moves slowly.",
-        "— When he goes somewhere, go there. When he won't move, don't move. When he makes that sound in his throat — she mimics Nico's low snarl, uncannily accurate — take note.",
+        "— He cannot tell you what is real in words. He can show you. He has been showing you the whole time.",
+        "Nico looks up at her and his tail goes slowly.",
+        "— When he goes somewhere, go there. When he will not move, do not move. And when he makes that noise in his throat, she says, and does the noise back at him with uncanny accuracy, take note.",
       ],
       mid: [
-        "— He can't be fooled by this place. He's been trying to show you things the whole time.",
-        "— When he makes that sound, take note. She does a decent impression of his snarl.",
-        "Nico seems almost smug.",
+        "— Dogs like him do not get confused by places like this. They cannot be fooled, because they are not using the part of the brain it gets into.",
+        "— He cannot tell you what is real in words. He can show you. He has been showing you the whole time.",
+        "— When he goes somewhere, go there. When he will not move, do not move. And when he makes that noise, she says, and does it back at him, take note.",
+        "Nico looks extremely pleased with himself, which is fair, and you tell him not to let it go to his head.",
       ],
-      low: [ "— He just knows. Trust him." ],
+      low: [
+        "— He just knows, she says. Trust him.",
+      ],
     },
   },
 
@@ -1771,21 +2118,25 @@ const SCENES = {
     prose: {
       high: [
         "She sits back down on the crate.",
-        "— I can see it. There's a — texture to people who've been cycled through a place like this. Like a book that's been opened and closed so many times the spine starts to go.",
+        "— I can see it. There is a texture to people who have been cycled through a place like this. Like a book that has been opened and shut so many times the spine has started to go.",
         "— What happened to me? you ask.",
-        "— I don't know the specifics. But this place finds you in the dark. When you're fading. Whatever was happening to you — it opened a door, and this place was waiting on the other side.",
+        "— I do not know the specifics. But it finds you in the dark. When you are fading. Whatever was happening to you opened a door, and this was waiting on the other side of it.",
         "She says it gently.",
-        "— The things that brought you here — they're in you somewhere. This place tried to eat them. It didn't finish the job. That's why you can still feel that something's wrong.",
+        "— The things that brought you here are still in you somewhere. This place tried to eat them and did not finish. That is why you can still feel that something is wrong.",
         "She nods at Nico.",
-        "— That's why he still knows you.",
+        "— And that is why he still knows you.",
       ],
       mid: [
-        "— There's a texture to people who've been through a place like this more than once.",
-        "— This place finds you in the dark. When you're fading. Something happened to you. More than once, she thinks.",
-        "— It tried to eat what you are. It didn't finish.",
-        "— That's why he still knows you, she says, nodding at Nico.",
+        "She sits back down on the crate.",
+        "— There is a texture to people who have been through a place like this more than once. Like a book opened and shut so often the spine has gone.",
+        "— It finds you in the dark. When you are fading. Something was happening to you, and it opened a door, and this was on the other side.",
+        "— It tried to eat what you are and it did not finish. That is why you can still tell something is wrong.",
+        "She nods at Nico.",
+        "— And that is why he still knows you.",
       ],
-      low: [ "— You've been here before. That's all she's sure of." ],
+      low: [
+        "— You have been here before, she says. That is all she seems sure of.",
+      ],
     },
     gainHigh: "Something brought you here before. More than once. The things that happened are still in you somewhere.",
     threadHigh: T.GAIN_LG,
@@ -1799,19 +2150,23 @@ const SCENES = {
     prose: {
       high: [
         "The door swings shut behind you.",
-        "The sounds of the fair — the voices, the bunting snapping in an unfelt breeze — cut off completely.",
-        "Just the dark. The cold stone smell.",
-        "Nico's nails on the steps ahead. Soft, unhurried, certain.",
-        "You follow the sound.",
+        "The fair goes out like a light. The voices, the bunting snapping in a breeze nobody could feel, all of it, gone at once.",
+        "There is only the dark, and the cold stone smell.",
+        "Nico's nails on the steps below you. Soft, unhurried, certain.",
+        "You go down after the sound.",
       ],
       mid: [
-        "The door closes. The fair goes quiet.",
-        "Darkness. The sound of Nico somewhere below.",
-        "You follow.",
+        "The door swings shut behind you and the fair goes out like a light.",
+        "The voices and the bunting and the whole warm noise of it, gone between one moment and the next.",
+        "There is the dark, and the cold stone smell, and Nico's nails going down the steps below you.",
+        "You put your hand on the wall and follow the sound.",
       ],
       low: [
-        "Dark. Nico ahead.",
-        "You follow.",
+        "The door swings shut behind you and the whole fair goes out like a light.",
+        "You put your hand back to push it open again and there is no handle on this side either.",
+        "There is only the dark and the cold stone smell and Nico's nails on the steps somewhere below.",
+        "You will go down and get him and come straight back up.",
+        "You follow the sound.",
       ],
     },
   },
@@ -1825,19 +2180,24 @@ const SCENES = {
     prose: {
       high: [
         "The steps end in a low room.",
-        "Stone floor, stone walls, a ceiling close enough to press on you. The air is cold and absolutely still — the kind that means nothing has moved here in a long time.",
-        "Five things occupy the space: a stack of wooden crates against the left wall, a set of metal shelves along the right, two heavy sacks slumped in the far right corner, a cluster of jars on the floor in the near left corner, and a narrow chest of drawers set against the back wall.",
-        "Centred in the back wall: a heavy iron bar across a door. Three recesses set into it, each housing a symbol.",
-        "Nico moves straight to the crates and sits. He looks at you over his shoulder.",
+        "Stone floor, stone walls, a ceiling close enough to press down on you. The air is cold and completely still, in the way that means nothing has moved through it for a long time.",
+        "Five things are in the room: a stack of wooden crates against the left-hand wall, metal shelves along the right, two heavy sacks slumped together in the far corner, a cluster of jars on the floor near you, and a narrow chest of drawers against the back wall.",
+        "Set into the back wall is a heavy iron bar across a door, with three recesses cut into it.",
+        "Nico goes straight to the crates and sits down. He looks at you over his shoulder.",
       ],
       mid: [
-        "A low stone room. Five distinct areas to look at.",
-        "An iron bar across the back door — three symbols set into it.",
-        "Nico has gone straight to the crates.",
+        "The steps end in a low stone room with a ceiling close enough to press down on you, and the air in it is cold and completely still.",
+        "There are crates against one wall and metal shelving along the other, two heavy sacks slumped in the far corner, jars on the floor near you, and a narrow chest of drawers at the back.",
+        "Across the back wall there is a door with a heavy iron bar over it, and three recesses cut into the bar.",
+        "It is somebody's storeroom, and it is a very odd storeroom.",
+        "Nico goes straight to the crates and sits down and looks at you over his shoulder.",
       ],
       low: [
-        "Stone room. Things to look at. A locked door.",
-        "Nico is by the crates.",
+        "The steps end in a low stone room, cold and very still, with a ceiling you could touch.",
+        "Crates along one wall, metal shelves along the other, sacks in the corner, jars on the floor, a chest of drawers at the back.",
+        "There is a door in the back wall with an iron bar across it and three recesses cut into the bar.",
+        "You should go back up. You came down for the dog and you have got the dog.",
+        "Nico has gone straight to the crates and sat down and will not look away from you, and you find you are not going back up.",
       ],
     },
     choices: [
@@ -1851,17 +2211,26 @@ const SCENES = {
     returnTo: "ch3_hub",
     prose: {
       high: [
-        "Three recesses shaped into the iron bar, each one a different form.",
-        "One fits something cylindrical. One something narrow-waisted. One something with weight and presence, carved rather than cast.",
-        "There are no levers. No numbers. Whatever goes in, goes in — and either fits or doesn't.",
-        "The order of the three recesses is fixed. Left to right.",
+        "Three recesses cut into the iron bar, each one a different shape.",
+        "One takes something cylindrical. One takes something narrow at the waist. One takes something with weight to it, carved rather than cast.",
+        "There are no levers and no numbers. Whatever goes in either fits or it does not.",
+        "The recesses run left to right and their order is fixed.",
         "The order you fill them is the combination.",
       ],
       mid: [
-        "Three shaped recesses in the iron. Something goes in each one.",
-        "Left to right. The order is the combination.",
+        "Three recesses cut into the iron bar, each a different shape.",
+        "One for something cylindrical, one for something narrow at the waist, one for something with weight to it that has been carved rather than cast.",
+        "No levers, no numbers, no dial. Whatever goes in fits or it does not.",
+        "They run left to right and the order is fixed, and the order you fill them is the combination.",
+        "Somebody built this for a person who would already know.",
       ],
-      low: [ "Three recesses. Something goes in each one." ],
+      low: [
+        "Three recesses cut into the iron, each a different shape, and no levers or numbers anywhere on it.",
+        "One cylindrical, one narrow at the waist, one for something heavy and carved.",
+        "Left to right, and the order you fill them is the combination.",
+        "It is a beautiful piece of ironwork. Somebody took a great deal of trouble over it.",
+        "You put your hand flat on the bar and it is not as cold as the walls.",
+      ],
     },
     revealHigh: "Whatever belongs in here — you'll know it when you find it.",
     choices: [
@@ -1881,20 +2250,30 @@ const SCENES = {
     returnTo: "ch3_hub",
     prose: {
       high: [
-        "Nico stands as you approach. He noses the side of the nearest crate and steps back.",
-        "You shift it.",
-        "On the wall behind: two curved claw marks, scratched into the stone at nose height. Deliberate. His.",
-        "Resting in the gap between crate and wall, as if set there deliberately: a small brass hourglass. Old, tarnished. The sand inside doesn't move.",
+        "Nico gets up as you come over. He noses the side of the nearest crate and steps back out of the way.",
+        "You move it.",
+        "On the wall behind there are two curved claw marks scratched into the stone at nose height. They are deliberate. They are his.",
+        "In the gap between the crate and the wall, set there as though somebody meant it to be found, is a small brass hourglass. Old and tarnished. The sand in it does not move.",
         "Nico sits back down and looks at you.",
       ],
       mid: [
-        "Nico nudges the crate. Behind it: two claw marks, and a small brass hourglass.",
-        "The sand doesn't move.",
+        "Nico gets up as you come over, noses the side of the nearest crate and steps back out of the way, which is not a thing dogs do.",
+        "You move it.",
+        "There are two curved claw marks scratched into the stone behind it at nose height.",
+        "In the gap between crate and wall, set there as though it were meant to be found, is a small brass hourglass, old and tarnished, and the sand in it does not move when you pick it up.",
+        "Nico sits back down and looks at you until you look back.",
       ],
-      low: [ "Behind the crate: a brass hourglass. Nico seems satisfied." ],
+      low: [
+        "Nico noses the nearest crate and steps back, and you move it because it is easier than arguing with him.",
+        "There are two curved marks scratched into the stone behind it, low down, the sort of thing a cellar collects over a few hundred years.",
+        "In the gap between the crate and the wall there is a small brass hourglass, old and tarnished, sitting there as neat as anything.",
+        "Somebody has lost that and been sorry about it.",
+        "Nico sits back down and watches you pick it up.",
+      ],
     },
     revealHigh: "Two claw marks. He's been here before. He left things behind.",
     choices: [
+      { id: "crate_claw_marks", type: "examine", next: "crate_claw_marks", label: "Put your fingers into the claw marks", thread: T.GAIN_MD },
       { id: "take_hourglass", type: "examine", next: "hourglass_taken", label: "Take the hourglass", thread: 0, consumable: "hourglass", hideIfConsumed: "hourglass" },
     ],
   },
@@ -1905,16 +2284,22 @@ const SCENES = {
     returnTo: "ch3_hub",
     prose: {
       high: [
-        "You pick it up. Lighter than it looks.",
-        "You tilt it. The sand doesn't shift at all.",
-        "Like it's been frozen mid-fall.",
+        "You pick it up. It is lighter than it looks.",
+        "You tilt it, and the sand does not shift at all. It is stopped, mid-fall.",
         "You put it in your bag.",
       ],
       mid: [
-        "You take it. The sand inside doesn't move when you tilt it.",
-        "Into the bag.",
+        "You pick it up and it is lighter than it looks, and when you tilt it the sand does not move.",
+        "You turn it right over and hold it there and count to ten, and nothing happens at all.",
+        "The glass is not cracked. The sand is not damp. It simply does not fall.",
+        "You put it in your bag.",
       ],
-      low: [ "You take the hourglass." ],
+      low: [
+        "You pick it up and it is lighter than it looks, and the sand does not move when you tilt it.",
+        "It will have gone hard. Old sand does, in damp, and everything down here is damp.",
+        "It is a lovely little thing. Brass, properly made, the sort you would put on a windowsill.",
+        "You put it in your bag and you do not think of it as taking.",
+      ],
     },
   },
 
@@ -1925,20 +2310,29 @@ const SCENES = {
     prose: {
       high: [
         "Metal shelves, old but solid. Coils of rope, rusted tools, a folded cloth that smells wrong.",
-        "On the middle shelf, between two corroded tins: three claw marks scratched into the metal.",
-        "Beside the marks, resting on a fold of cloth as though displayed: an infinity symbol carved from solid marble, palm-sized. White with gold veins. The carving is deep and deliberate — not etched, but formed, as though the shape was always inside the stone waiting to be released.",
-        "The symbol is deep and clean, filled with something dark.",
-        "It has absolutely no business being here.",
+        "On the middle shelf, between two corroded tins, there are three claw marks scratched into the metal.",
+        "Beside them, resting on a fold of cloth as though it has been put on display, is an infinity symbol carved out of solid marble, the size of your palm. White, with gold running through it. The carving is deep and deliberate, not scratched on but shaped, as though the form had been inside the stone waiting.",
+        "The channels of it are clean and filled with something dark.",
+        "It has no business whatever being down here.",
       ],
       mid: [
-        "Tools, rope, old cloth. Three claw marks on the shelf.",
-        "Beside them: a marble infinity symbol. White, gold-veined. The carving deep and clean.",
-        "It doesn't belong here.",
+        "Metal shelves, old but solid. Coils of rope, rusted tools, a folded cloth that you do not want to touch.",
+        "There are three claw marks scratched into the metal of the middle shelf, between two corroded tins.",
+        "Beside them, on a fold of cloth as though somebody had set it out, is an infinity symbol carved from solid marble, palm-sized, white with gold running through it.",
+        "The carving is deep and clean and the channels are filled with something dark.",
+        "Everything else on these shelves has rusted or rotted. That has not.",
       ],
-      low: [ "A marble infinity symbol on the shelf. Beautiful. Wrong." ],
+      low: [
+        "Metal shelves with rope and old tools on them, and a folded cloth, and a smell you cannot place.",
+        "There are three marks scratched into the middle shelf, which will be where they have dragged something heavy across it.",
+        "Beside them, sitting on a fold of cloth like something in a shop window, is a marble infinity symbol about the size of your palm. White, with gold in it.",
+        "It is the loveliest thing you have seen since you got here, and it is down here in the dark with the rust.",
+        "Somebody ought to have it out where it can be looked at.",
+      ],
     },
     revealHigh: "Polished marble and gold veins, down here with the rust and the rot. Someone put this here on purpose.",
     choices: [
+      { id: "shelf_cloth", type: "toedip", next: "shelf_cloth", label: "Unfold the cloth that smells wrong", thread: T.DRAIN_MD, consumable: "cloth" },
       { id: "take_marble", type: "examine", next: "marble_taken", label: "Take the marble infinity symbol", thread: 0, consumable: "marble", hideIfConsumed: "marble" },
     ],
   },
@@ -1949,17 +2343,27 @@ const SCENES = {
     returnTo: "ch3_hub",
     prose: {
       high: [
-        "It's cold and smooth, heavier than marble has any right to be.",
-        "The gold veins catch even the dim light of this room.",
+        "It is cold and smooth and heavier than marble has any right to be.",
+        "The gold catches what little light there is down here.",
         "You turn it over. The back is plain.",
         "You keep it.",
       ],
       mid: [
-        "Heavy, cold, beautiful.",
-        "Into your bag.",
+        "It is cold and smooth and a good deal heavier than a thing that size should be.",
+        "The gold catches what light there is, which is almost none.",
+        "You turn it over and the back is plain, with no maker's mark and no initials, which is unusual for something made this carefully.",
+        "You put it in your bag and you are aware of the weight of it there.",
       ],
-      low: [ "You take it." ],
+      low: [
+        "It is cold and smooth and heavier than you expect, and the gold catches the light beautifully.",
+        "You turn it over twice and then a third time.",
+        "You put it in your bag and then you take it out again to look at it, and then you put it back.",
+        "You would like to keep this one. Not use it. Keep it.",
+      ],
     },
+      choices: [
+      { id: "marble_grooves", type: "examine", next: "marble_grooves", label: "Look at what is down in the grooves", thread: T.GAIN_MD },
+    ],
   },
 
   examine_sacks: {
@@ -1968,19 +2372,29 @@ const SCENES = {
     returnTo: "ch3_hub",
     prose: {
       high: [
-        "Hessian sacks, heavy, slumped against each other.",
-        "You loosen the nearest one.",
-        "Bird skulls. Dozens of them, small and dry, packed without ceremony.",
-        "Nico doesn't come near.",
+        "Hessian sacks, heavy, slumped against one another.",
+        "You loosen the neck of the nearest.",
+        "Bird skulls. Dozens of them, small and dry, packed in without any ceremony at all.",
+        "Nico does not come over.",
       ],
       mid: [
-        "Bird skulls. Dozens of them.",
-        "Nico stays back.",
+        "Hessian sacks, heavy, slumped against one another, and the nearest one gives when you push it.",
+        "You loosen the neck of it and put your hand in before you have thought about it.",
+        "Bird skulls. Dozens of them, small and dry, packed in loose like grain.",
+        "You take your hand out and wipe it on your jeans.",
+        "Nico does not come over.",
       ],
-      low: [ "Bird skulls in a sack." ],
+      low: [
+        "Hessian sacks slumped against one another, heavy, and the nearest one gives when you push it.",
+        "You loosen the neck and look in, and it is full of small dry bird skulls, dozens of them, packed in loose.",
+        "Farms are like this. There is always a shed with something horrible in it that nobody thinks anything of.",
+        "You put your hand in and move them about and they are very light.",
+        "Nico does not come over.",
+      ],
     },
     choices: [
-      { id: "take_skull", type: "examine", next: "skull_taken", label: "Take one of the skulls", thread: 0, consumable: "skull", hideIfConsumed: "skull" },
+      { id: "count_skulls", type: "examine", next: "skulls_counted", label: "Count them", thread: T.GAIN_LG },
+      { id: "take_skull", type: "examine", next: "skull_taken", label: "Take one of the skulls", thread: T.DRAIN_SM, consumable: "skull", hideIfConsumed: "skull" },
     ],
   },
 
@@ -1991,15 +2405,22 @@ const SCENES = {
     prose: {
       high: [
         "You pick one up. Light as paper. Hollow.",
-        "The beak is still intact.",
+        "The beak is still whole.",
         "Nico glances at it and looks away.",
         "You put it in your bag.",
       ],
       mid: [
-        "Light. Hollow. You take it.",
-        "Nico isn't interested.",
+        "You pick one up and it weighs nothing at all, and the beak is still whole.",
+        "You are not sure why you want it. You would not pick up a dead bird in a lane.",
+        "Nico glances at it once and then looks away and keeps looking away.",
+        "You put it in your bag.",
       ],
-      low: [ "You take a bird skull." ],
+      low: [
+        "You pick one up and it weighs nothing, and the beak is perfectly whole.",
+        "It is rather beautiful when you look at it properly. People pay money for these.",
+        "Nico glances at it and looks away and will not look back.",
+        "You put it in your bag and choose a second one, and then put the second one back, because that would be greedy.",
+      ],
     },
   },
 
@@ -2009,16 +2430,23 @@ const SCENES = {
     returnTo: "ch3_hub",
     prose: {
       high: [
-        "Four jars clustered in the corner, dark contents, no labels.",
-        "Older than Rose's — the glass clouded, the wax seals cracked.",
-        "On the floor beside them: one single claw mark, scratched into the stone.",
-        "Just the one.",
+        "Four jars together in the corner, dark inside, no labels on any of them. Older than Rose's. The glass has clouded and the wax seals have cracked.",
+        "On the floor beside them there is one clean scratch in the stone, about the length of your hand.",
+        "Nico comes as far as the edge of them and stops there.",
       ],
       mid: [
-        "Old jars in the corner.",
-        "One claw mark on the floor beside them.",
+        "Four jars together in the corner, dark inside and unlabelled, older than the ones on Rose's stall. The glass has gone cloudy and the wax seals are cracked.",
+        "There is a single clean scratch in the stone on the floor beside them, about the length of your hand.",
+        "You crouch down and look at them for longer than you mean to.",
+        "Nico comes as far as the edge of them and stops.",
       ],
-      low: [ "Jars on the floor." ],
+      low: [
+        "Four jars in the corner, dark and unlabelled, the glass gone cloudy and the wax seals cracked with age.",
+        "Rose would know what these are. Rose would probably want them back.",
+        "There is a clean scratch in the stone floor beside them, about the length of your hand.",
+        "You crouch down and stay there a while.",
+        "Nico comes as far as the edge of them and will come no further.",
+      ],
     },
     revealHigh: "One claw mark. Of all the marks in this room, this is the first.",
     choices: [
@@ -2032,16 +2460,28 @@ const SCENES = {
     returnTo: "ch3_hub",
     prose: {
       high: [
-        "You take the nearest one. Cold. The seal is cracked but holds.",
-        "You don't open it.",
-        "Nico watches. Doesn't step back.",
+        "You take the nearest. It is cold.",
+        "The seal is cracked but it is holding.",
+        "You do not open it.",
+        "Nico watches. He does not step back.",
       ],
       mid: [
-        "Cold, heavy, sealed.",
-        "Nico doesn't react.",
+        "You take the nearest one and it is cold all the way through, colder than the floor it was standing on.",
+        "The wax seal is cracked but holding, and you could get a thumbnail under it without any trouble at all.",
+        "You do not.",
+        "Nico watches you the whole time and does not step back, which he did at Rose's stall.",
       ],
-      low: [ "You take a jar." ],
+      low: [
+        "You take the nearest one, and it is cold right through, colder than the floor it was standing on.",
+        "The seal is cracked and it would come away under a thumbnail without any effort.",
+        "You hold it a moment with your thumb against the wax.",
+        "Then you put it in your bag, for now.",
+        "Nico watches you do it and does not step back.",
+      ],
     },
+      choices: [
+      { id: "open_floor_jar", type: "progress", next: "jar_opened", label: "Break the seal and open it", thread: T.DRAIN_LG, consumable: "jar_opened" },
+    ],
   },
 
   examine_drawers: {
@@ -2050,20 +2490,23 @@ const SCENES = {
     returnTo: "ch3_hub",
     prose: {
       high: [
-        "Three narrow drawers. The top two are empty.",
-        "The bottom one sticks, then gives.",
-        "Inside: a single piece of paper, folded once.",
-        "You open it.",
-        "In careful, small handwriting:",
-        "_Preserved. In time. Forever._",
-        "Three words.",
-        "Someone left this for you. Or left it for themselves, and you found it instead.",
+        "Three narrow drawers. The top two are empty. The bottom one sticks, and then gives.",
+        "Inside there is one piece of paper, folded once.",
+        "You open it. In careful, unhurried handwriting: Preserved. In time. Forever.",
       ],
       mid: [
-        "Bottom drawer. A folded note.",
-        "_Preserved. In time. Forever._",
+        "Three narrow drawers. The top two are empty and have been for a long time by the smell of them. The bottom one sticks and then gives.",
+        "Inside there is a single piece of paper, folded once, and nothing else at all.",
+        "You open it. In careful, unhurried handwriting: Preserved. In time. Forever.",
+        "Three things, in order, and there are three recesses in the bar across the door.",
       ],
-      low: [ "A note. Three words." ],
+      low: [
+        "Three narrow drawers, the top two empty, the bottom one sticking and then giving all at once.",
+        "There is one piece of paper in it, folded once.",
+        "Preserved. In time. Forever, in careful handwriting, with a good pen.",
+        "It is a lovely sentiment. Somebody wrote that for somebody.",
+        "You read it twice before it occurs to you that there are three recesses in the bar across the door.",
+      ],
     },
     revealHigh: "Preserved. In time. Forever. Three words. Three recesses.",
     choices: [
@@ -2077,16 +2520,26 @@ const SCENES = {
     returnTo: "ch3_hub",
     prose: {
       high: [
-        "You fold it back along its crease and put it in your bag.",
-        "The handwriting was careful. Unhurried.",
+        "You fold it back along its own crease and put it in your bag.",
+        "The handwriting was careful. It was not hurried.",
         "Whoever wrote this had time.",
       ],
       mid: [
-        "You take the note.",
-        "The handwriting was careful. They had time.",
+        "You fold it back along its own crease and put it in your bag.",
+        "The handwriting is careful and not hurried anywhere, not even at the end, where handwriting usually goes.",
+        "Whoever wrote it was not in any difficulty when they wrote it.",
+        "They had time, and they knew somebody would come and read it.",
       ],
-      low: [ "You take the note." ],
+      low: [
+        "You fold it back along its own crease and put it away carefully so as not to spoil it.",
+        "Such lovely handwriting. Nobody writes like that any more.",
+        "It is not hurried anywhere, not even at the end.",
+        "Whoever wrote it had all the time in the world.",
+      ],
     },
+      choices: [
+      { id: "note_handwriting", type: "examine", next: "note_handwriting", label: "Look at the handwriting again", thread: T.GAIN_MD, requiresExamined: "examine_room" },
+    ],
   },
 
   ch3_hub: {
@@ -2095,14 +2548,21 @@ const SCENES = {
     prose: {
       high: [
         "The room waits.",
-        "Nico has settled near the barred door. Patient.",
+        "Nico has settled by the barred door. He is being patient with you.",
         "You have things in your bag. The lock has three recesses.",
       ],
       mid: [
-        "Nico near the door. The lock waiting.",
-        "You have things to try.",
+        "The room waits, and the air in it has not moved since you came down.",
+        "Nico has settled by the barred door and is being patient with you, which he is not usually.",
+        "You have things in your bag. The lock has three recesses.",
+        "There is no reason this should be the only way out, and it is.",
       ],
-      low: [ "The lock. Nico by the door." ],
+      low: [
+        "The room waits. It is not unpleasant down here once you are used to it.",
+        "Nico has settled by the barred door and will not come away from it.",
+        "There are three recesses in the lock and there are things in your bag.",
+        "You cannot now remember how long you have been down here, and it does not worry you as much as it should.",
+      ],
     },
   },
 
@@ -2112,19 +2572,366 @@ const SCENES = {
     chapterEndText: "Chapter Four — The Crypt",
     prose: {
       high: [
-        "The door swings shut behind you.",
-        "The storeroom is gone.",
-        "Ahead: steps cut deeper into the earth, older than the village above, older than anything you've seen today.",
-        "The walls here are not stone. They are *rock* — raw, unfinished, the kind that has never seen light.",
-        "Nico moves down without hesitation.",
-        "You follow the sound of his nails.",
+        "The door swings shut behind you and the storeroom is gone.",
+        "Ahead of you there are steps cut deeper into the earth, older than the village above, older than anything you have stood on.",
+        "The air coming up is colder and it is moving.",
+        "Nico goes down first. He did not stop to be asked.",
+        "You follow him.",
       ],
       mid: [
-        "Deeper steps. Older walls.",
-        "Nico below you in the dark.",
-        "You follow.",
+        "The door swings shut behind you and the storeroom is gone.",
+        "Ahead there are more steps, cut deeper into the earth, older than the village above them.",
+        "The air coming up from below is colder than the room you have left, and it is moving, which means it comes from somewhere.",
+        "Nico goes down first without stopping to be asked.",
+        "You follow him.",
       ],
-      low: [ "Down. Older. Darker. Nico ahead." ],
+      low: [
+        "The door swings shut behind you and the storeroom is gone, and you do not turn round to look at it.",
+        "There are more steps going down, older than the village, cut into the earth itself.",
+        "The air coming up is cold and moving.",
+        "Nico goes down first without waiting for you.",
+        "You follow, because he is going, and because there is nothing behind you now.",
+      ],
+    },
+  },
+
+  // ── CH3: THE CLAW MARKS ──────────────────────────────────
+  crate_claw_marks: {
+    nico: "cower",
+    isExamine: true,
+    returnTo: "examine_crates",
+    prose: {
+      high: [
+        "You crouch down and put your fingers into the marks.",
+        "There are two of them, curved, deep into the stone. They have not been scratched into it. They have gone in, the way a thumb goes into clay.",
+        "They are at the height of your shoulder.",
+        "Whatever made them was standing where you are standing now, and it was about your size, and it had hands.",
+        "Nico will not come over and look.",
+      ],
+      mid: [
+        "You crouch down and put your fingers into the marks.",
+        "Two of them, curved, cut deep into the stone at about the height of your shoulder.",
+        "Old buildings take a lot of damage over the years, and cellars take the most of it, and you have no idea what sort of tool would leave a mark like that.",
+        "You take your hand away and wipe it on your jeans.",
+        "Nico stays where he is by the door.",
+      ],
+      low: [
+        "You crouch down and put your fingers into the marks, and they fit rather well.",
+        "Two curves cut into the stone at shoulder height, worn smooth at the edges the way old things go.",
+        "Somebody must have moved something heavy through here once, years ago, and caught the wall doing it.",
+        "It is nice to think of all the people who have worked in this room before you.",
+        "Nico will not come over, and you leave him to it.",
+      ],
+    },
+    revealHigh: "The marks are at your shoulder height. Whatever made them stood where you are standing.",
+  },
+
+  // ── CH3: THE CLOTH ───────────────────────────────────────
+  shelf_cloth: {
+    nico: "snarl",
+    isExamine: true,
+    returnTo: "examine_shelves",
+    prose: {
+      high: [
+        "You take it down and unfold it. Linen, or something close to it, gone stiff along the creases.",
+        "There is a shape worn into the middle of it, the way a cloth wears when it has been laid over the same object for a very long time.",
+        "You put it to your face, because you want to know what the smell is.",
+        "It is cut grass. It is the smell that came up through the window on your first morning, and it is down here in a cellar, in a folded cloth, with no grass within thirty feet of it.",
+        "You hold it there a moment longer than you need to.",
+      ],
+      mid: [
+        "You take it down and unfold it. Stiff along the creases, with a shape worn into the middle of it.",
+        "You put it to your face without really deciding to.",
+        "Cut grass. Which is a strange thing to find in a cellar, though linen holds a smell for years and this cloth has clearly been somewhere pleasant.",
+        "You fold it back along its own creases and put it where it was.",
+        "Nico makes a low sound behind you and you tell him you are coming.",
+      ],
+      low: [
+        "You take it down and unfold it, and it is stiff along the creases, and it smells wonderful.",
+        "Cut grass, of all things, down here. You put your face into it properly.",
+        "It is the same as the morning of your first day, and standing here with it you feel about as happy as you have felt since you arrived.",
+        "You fold it up again very carefully and put it back exactly where it was, because it is somebody's, and you would not want them to know.",
+        "Nico makes a low sound behind you and you ignore him.",
+      ],
+    },
+  },
+
+  // ── CH3: COUNTING ────────────────────────────────────────
+  skulls_counted: {
+    nico: "alert",
+    isExamine: true,
+    returnTo: "examine_sacks",
+    prose: {
+      high: [
+        "You start counting them, because it seems the least you can do.",
+        "You get to forty before you stop, and you stop because they are not all the same bird. Some have long beaks. Some are small enough to sit inside your ear.",
+        "Somebody caught each of these separately. Somebody took the time over every one.",
+        "Forty-one. Forty-two.",
+        "You put the sack down, and your hands are steadier than they were when you picked it up, because a number is a fact, and facts belong to you.",
+      ],
+      mid: [
+        "You start counting them, and you get to about forty before you lose your place.",
+        "They are not all the same bird, which you had not expected. Some have long beaks and some are very small indeed.",
+        "Somebody collected all of these. That is a great deal of collecting.",
+        "You count a few more and then you stop, because there is a lock to get through and this is not helping.",
+        "You put the sack down where you found it.",
+      ],
+      low: [
+        "You start counting them and you get to about forty and lose your place, and you laugh at yourself for trying.",
+        "They are not all the same bird. Somebody has been at this for years, patiently, one at a time.",
+        "There is something rather lovely about that. A person with a proper hobby.",
+        "You put the sack down and pat it flat.",
+        "You will ask about them later, when there is somebody to ask.",
+      ],
+    },
+    gainHigh: "Forty-two, and not all the same bird. Somebody took the time over every one.",
+  },
+
+  // ── CH3: THE GROOVES ─────────────────────────────────────
+  marble_grooves: {
+    nico: "alert",
+    isExamine: true,
+    returnTo: "ch3_hub",
+    prose: {
+      high: [
+        "You hold it up and turn it until the light gets down into the channels.",
+        "The dark in them is not dirt and it is not shadow. It went in as a liquid and dried there, and it has done that more than once. You can see the layers, the way wax builds down the side of a candlestick.",
+        "Somebody has been filling these grooves for years.",
+        "You wipe your thumb on your jeans without thinking about it.",
+        "Then you look at your thumb.",
+      ],
+      mid: [
+        "You hold it up and turn it until the light gets down into the channels.",
+        "There is something dark down in them. It has gone in wet and dried, and there is more than one layer of it.",
+        "Marble picks up everything. You have a chopping board at home that has never come properly clean.",
+        "You wipe your thumb on your jeans and put the marble back in your bag.",
+        "It really is a beautiful thing.",
+      ],
+      low: [
+        "You hold it up and turn it until the light gets down into the channels, and it is even lovelier close to.",
+        "There is something dark settled down in the grooves, which is only what happens to anything old and carved.",
+        "Somebody has kept this well. You can tell when a thing has been looked after.",
+        "You wipe your thumb on your jeans and put the marble away.",
+        "You find you do not want to put it down for long.",
+      ],
+    },
+    revealHigh: "It has been filled and refilled. There are layers in it.",
+  },
+
+  // ── CH3: THE HANDWRITING ─────────────────────────────────
+  note_handwriting: {
+    nico: "alert",
+    isExamine: true,
+    returnTo: "ch3_hub",
+    prose: {
+      high: [
+        "You take it out again and hold it under what light there is.",
+        "The letters lean the same way. The same careful slope, the same long tail coming off the g, the same little gap before every capital.",
+        "It is the hand from the card propped against the mirror in your room. Lovely to have you back, Sarah.",
+        "Whoever writes the welcomes also writes this.",
+        "You put the note away in a different pocket from the one it came out of, for no reason you could explain.",
+      ],
+      mid: [
+        "You take it out again and hold it under what light there is.",
+        "The writing is familiar, and it takes you a moment, and then you have it: the card in your room, propped against the mirror.",
+        "The same hand wrote both.",
+        "Well, somebody has to write things, and there cannot be many people down here who do.",
+        "You put the note away.",
+      ],
+      low: [
+        "You take it out again and hold it under what light there is, and it is lovely handwriting, really lovely.",
+        "You have seen it before. The card in your room, the one propped against the mirror.",
+        "The same person wrote both, and you find that rather touching, that somebody sat down and did this by hand.",
+        "Nobody writes anything out any more.",
+        "You put the note away carefully so as not to crease it.",
+      ],
+    },
+    revealHigh: "The same hand wrote the welcome card in your room.",
+  },
+
+  // ── CH3: THE JAR ─────────────────────────────────────────
+  jar_opened: {
+    nico: "snarl",
+    isExamine: true,
+    returnTo: "ch3_hub",
+    prose: {
+      high: [
+        "The wax comes away under your thumbnail in one piece. It is still soft.",
+        "You lift the lid.",
+        "What is inside is dark, and it is not still. It moves the way honey moves, slowly, catching itself up.",
+        "The smell that comes out of it is the smell of the eggs on Hobson's table, and the water in the glass beside your bed, and the air that came up through the window on your first morning.",
+        "It is the smell of everything here that you have liked.",
+        "You have breathed it in before you have decided to.",
+        "Nico is barking. You did not hear him start.",
+      ],
+      mid: [
+        "The wax comes away under your thumbnail, still soft after all this time, and you lift the lid.",
+        "What is inside is dark and moves slowly when you tilt it.",
+        "The smell is wonderful. It is familiar, too, and you cannot place it, and then you can: it is breakfast, and the water by your bed, and the first morning through the window.",
+        "You breathe it in properly before you put the lid back.",
+        "Nico is barking somewhere behind you.",
+      ],
+      low: [
+        "The wax comes away under your thumbnail in one piece and you lift the lid, and oh, that is glorious.",
+        "It is dark and slow and it smells of every good thing that has happened to you since you got here, all of it at once, in a jar in a cellar.",
+        "You put your face right over it and breathe in until your chest is full.",
+        "You could stay down here with this.",
+        "Nico is barking. He has been barking for a while, you think. You will see to him in a minute.",
+      ],
+    },
+  },
+
+  // ── CH3: SITTING DOWN ────────────────────────────────────
+  storeroom_rest: {
+    nico: "alert",
+    isExamine: true,
+    returnTo: "ch3_hub",
+    prose: {
+      high: [
+        "You sit down with your back against the crates and put your hands flat on the floor.",
+        "The stillness in this room comes up through the stone and into you. It is restful the way cold water is restful, which is to say that it takes something out of you while it is doing it.",
+        "You do not know how long you sit there.",
+        "It is Nico's nose against your ear that brings you back, and by then your hands have gone numb, and the light has not changed at all.",
+      ],
+      mid: [
+        "You sit down with your back against the crates and put your hands flat on the floor.",
+        "It is colder than you expected and more comfortable than it has any right to be, and you shut your eyes for a moment.",
+        "When you open them again you could not say how long you have been sitting there.",
+        "Nico has his nose against your ear. You tell him you are getting up, and then you sit for a little longer.",
+      ],
+      low: [
+        "You sit down with your back against the crates and put your hands flat on the cold floor, and it is bliss.",
+        "You had not realised how tired you were. The stillness of the room settles over you like a blanket somebody has put there.",
+        "You shut your eyes.",
+        "Nico's nose is against your ear and you push his head away, gently, without opening your eyes, because you are not finished yet.",
+      ],
+    },
+  },
+
+  // ── CH2: THE OAK ─────────────────────────────────────────
+  // Reachable at low only: a -14 from a full bar lands on 6.
+  oak_name_carved: {
+    nico: "snarl",
+    isExamine: true,
+    returnTo: "the_green",
+    prose: {
+      high: [
+        "You put the point of your key to the bark and then you take it away again, and your hand is shaking, and you go back to the fair without looking behind you.",
+      ],
+      mid: [
+        "You get as far as the first letter before you stop, and you rub your thumb over the mark until you cannot see it, and you tell yourself you were only ever going to do the one.",
+      ],
+      low: [
+        "There is a bare patch low down on the trunk, at about the height of a person sitting, and it is the only bare patch left.",
+        "You take your door key out of your bag and you cut the S into the bark, and then the rest of it, and you take your time over it because it is going to be there a long while.",
+        "The wood is soft. It gives like something that wants to.",
+        "When you have finished you sit back on your heels and look at it among all the others, and it does not look new. It looks like it has been there as long as the rest of them.",
+        "Nico is standing well back with his lip lifted, making a sound you have never heard him make, and you tell him to be quiet, and he is.",
+      ],
+    },
+  },
+
+  // ── CH2: THE LEAD ────────────────────────────────────────
+  nico_tied: {
+    nico: "cower",
+    isExamine: true,
+    returnTo: "fair_hub",
+    prose: {
+      high: [
+        "You start to loop the lead around the post and then you stop, because you know exactly what you are doing, and you take him with you.",
+      ],
+      mid: [
+        "He will not settle. He plants himself at every stall and leans back against the collar, and people are starting to look.",
+        "You loop the lead twice around the post by the gate and tell him you will be five minutes.",
+        "He does not pull. He does not bark. He sits down facing the way you have gone and he watches you the whole time you are away, and you can feel it between your shoulders at every stall.",
+        "When you come back for him he gets up and presses himself against your leg, and you crouch down and tell him you are sorry, and you mean it.",
+        "You do not think about why the post is there, or why it has a ring set into it at exactly the right height.",
+      ],
+      low: [
+        "He will not settle. He plants himself at every stall and leans back against the collar like a much smaller dog, and it is embarrassing.",
+        "You loop the lead twice around the post by the gate and tell him to behave himself.",
+        "It is a great relief. You can walk properly. You can look at things for as long as you want to look at them, and nobody is pulling at your arm.",
+        "You are away longer than you meant to be.",
+        "When you come back he is sitting exactly where you left him, facing the way you went, and he gets up and presses against your leg, and you make him wait while you finish your conversation.",
+      ],
+    },
+  },
+
+  // ── CH2: THE CIRCLE ──────────────────────────────────────
+  circle_joined: {
+    nico: "cower",
+    isExamine: true,
+    returnTo: "hollow_circle",
+    prose: {
+      high: [
+        "You take one step towards the gap and your whole body refuses it, the way it refuses the edge of a high place, and you step back.",
+      ],
+      mid: [
+        "There is a gap between two of them, about the width of a person.",
+        "You step into it, because it seems ruder not to, and you turn inward the way they are turned.",
+        "There is nothing in the middle of the circle. You had assumed there would be.",
+        "Nobody says anything. Nobody looks at you. After a while you stop expecting them to, and the not-expecting is very restful, and you could not say how long you stand there.",
+        "It is Nico at the end of his lead, hauling, that gets you out of it.",
+      ],
+      low: [
+        "There is a gap between two of them, about the width of a person, and it has been there the whole time.",
+        "You step into it and turn inward the way they are turned, and it is the most comfortable you have been since you arrived.",
+        "There is nothing in the middle. That is fine. You had thought there would be something and there is not, and it does not matter at all.",
+        "Nobody speaks and nobody looks and you do not need them to. You could stand here.",
+        "Nico is hauling at the end of the lead and choking himself doing it, and you wait until he stops, and then you stay a while longer.",
+      ],
+    },
+  },
+
+  // ── CH2: THE CLOSING ─────────────────────────────────────
+  closing_agreed: {
+    nico: "snarl",
+    isExamine: true,
+    returnTo: "hollow_circle",
+    prose: {
+      high: [
+        "You hear yourself starting to say yes and you close your mouth on it, and you tell them you have not decided, and the one nearest you stops smiling.",
+      ],
+      mid: [
+        "— I will, you say. I will stay for it.",
+        "It is the sort of thing you say at a party, and it costs nothing, and you have said it a hundred times to people you never saw again.",
+        "All six of them turn their heads towards you at the same time.",
+        "Then they turn back, and the one nearest you says how lovely, and the fair goes on around you exactly as it was.",
+        "You have the feeling of having signed something without reading it, which is also a thing you have done a hundred times.",
+      ],
+      low: [
+        "— I will, you say. Of course I will. I would not miss it.",
+        "All six of them turn their heads towards you at the same time, and you find you like it, being looked at by all of them at once.",
+        "— How lovely, says the one nearest you.",
+        "You want to ask what time it starts and you do not, because asking would make it sound as though you might not come.",
+        "You will be there. You have said so now, and you are somebody who keeps their word.",
+      ],
+    },
+  },
+
+  // ── CH2: THE FOOD STALLS ─────────────────────────────────
+  fair_food: {
+    nico: "snarl",
+    isExamine: true,
+    returnTo: "fair_hub",
+    prose: {
+      high: [
+        "You get as far as the queue and then you think about the eggs at Hobson's table, and you put your money away, and you are hungry for the rest of the day.",
+      ],
+      mid: [
+        "Hot sugar and something fried, and you have not eaten since the morning.",
+        "The woman hands it over in a twist of paper and will not take anything for it. Nobody at the fair will take anything for anything, you notice, and then you stop noticing it.",
+        "It is very good. It is better than it has any right to be for something cooked on a green.",
+        "You eat it walking, the way you would at any fair anywhere.",
+        "Nico walks beside you and does not once look up at the paper in your hand, which is not like him, and you are enjoying yourself too much to make anything of it.",
+      ],
+      low: [
+        "Hot sugar and something fried, and you realise you are starving.",
+        "The woman hands it over in a twist of paper and will not take anything for it, and neither will the next one, and you go along the row of them accepting things.",
+        "It is all very good. You eat standing up in the middle of the green with the bunting going over your head and you cannot remember the last time you were this happy.",
+        "Nico does not beg. Nico has not begged all day.",
+        "You buy him nothing, because he has not asked, and you go back for more of the fried thing instead.",
+      ],
     },
   },
 };
@@ -2625,10 +3432,14 @@ function Tealby() {
   const [lastChoice, setLastChoice] = useState(null);
   const [revealNote, setRevealNote] = useState(null);
   const [gainNote, setGainNote] = useState(null);
+  const [flinchNote, setFlinchNote] = useState(null);
   const [animating, setAnimating] = useState(false);
   const [showChapterEnd, setShowChapterEnd] = useState(false);
   const [examinedIds, setExaminedIds] = useState(new Set());
   const [consumedIds, setConsumedIds] = useState(new Set());
+  // Thread gains are paid once. Without this, re-opening the same examine
+  // scene farms its bonus indefinitely and the whole economy collapses.
+  const [creditedIds, setCreditedIds] = useState(new Set());
   const [lastThreadDelta, setLastThreadDelta] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
@@ -2672,6 +3483,11 @@ function Tealby() {
     let choices = scene.choices || [];
 
     if (scene.isFairHub) {
+      choices = [
+        ...choices,
+        { id: "fair_food", type: "toedip", next: "fair_food", label: "Get something from one of the food stalls", thread: T.DRAIN_MD, consumable: "fair_food" },
+        { id: "tie_nico", type: "toedip", next: "nico_tied", label: "Tie Nico up by the gate — he will not settle", thread: T.DRAIN_MD, consumable: "nico_tied" },
+      ];
       const baileyUnlocked = stallsVisited.size >= 2 && !examinedIds.has("bailey_leave");
       const baileyDone = examinedIds.has("bailey_leave") || hasBaileyKey;
       if (baileyUnlocked && !baileyDone) {
@@ -2689,15 +3505,17 @@ function Tealby() {
     if (scene.isCh3Hub) {
       choices = [
         { id: "ch3hub_lock", type: "progress", next: "examine_lock", label: "Try the lock", thread: 0 },
-        { id: "ch3hub_crates", type: "examine", next: "examine_crates", label: "Go to the crates", thread: 0, hideIfConsumed: "hourglass" },
-        { id: "ch3hub_shelves", type: "examine", next: "examine_shelves", label: "Check the shelves", thread: 0, hideIfConsumed: "marble" },
-        { id: "ch3hub_sacks", type: "examine", next: "examine_sacks", label: "Look at the sacks", thread: 0, hideIfConsumed: "skull" },
-        { id: "ch3hub_jars", type: "examine", next: "examine_floor_jars", label: "Look at the floor jars", thread: 0, hideIfConsumed: "storeroom_jar" },
-        { id: "ch3hub_drawers", type: "examine", next: "examine_drawers", label: "Open the chest of drawers", thread: 0, hideIfConsumed: "note" },
+        { id: "ch3hub_crates", type: "examine", next: "examine_crates", label: "Go to the crates", thread: 0 },
+        { id: "ch3hub_shelves", type: "examine", next: "examine_shelves", label: "Check the shelves", thread: 0 },
+        { id: "ch3hub_sacks", type: "examine", next: "examine_sacks", label: "Look at the sacks", thread: 0 },
+        { id: "ch3hub_jars", type: "examine", next: "examine_floor_jars", label: "Look at the floor jars", thread: 0 },
+        { id: "ch3hub_drawers", type: "examine", next: "examine_drawers", label: "Open the chest of drawers", thread: 0 },
+        { id: "ch3hub_rest", type: "toedip", next: "storeroom_rest", label: "Sit down for a moment", thread: T.DRAIN_MD, consumable: "rested" },
       ].filter(c =>
         !(c.consumable && consumedIds.has(c.consumable)) &&
         !(c.hideIfConsumed && consumedIds.has(c.hideIfConsumed)) &&
-        !(c.requiresConsumed && !consumedIds.has(c.requiresConsumed))
+        !(c.requiresConsumed && !consumedIds.has(c.requiresConsumed)) &&
+        !(c.requiresExamined && !examinedIds.has(c.requiresExamined))
       );
     }
 
@@ -2714,7 +3532,8 @@ function Tealby() {
       .filter(c =>
         !(c.consumable && consumedIds.has(c.consumable)) &&
         !(c.hideIfConsumed && consumedIds.has(c.hideIfConsumed)) &&
-        !(c.requiresConsumed && !consumedIds.has(c.requiresConsumed))
+        !(c.requiresConsumed && !consumedIds.has(c.requiresConsumed)) &&
+        !(c.requiresExamined && !examinedIds.has(c.requiresExamined))
       );
   };
 
@@ -2733,18 +3552,20 @@ function Tealby() {
       window.localStorage.setItem(SAVE_KEY, JSON.stringify({
         v: SAVE_VERSION, sceneId, thread, currentChapter,
         examinedIds: [...examinedIds], consumedIds: [...consumedIds],
+        creditedIds: [...creditedIds],
         stallsVisited: [...stallsVisited],
         hasBaileyKey, hasRosePreserve, hasHourglass, hasMarble, hasBirdSkull,
         chapterStart: chapterStart.current ? {
           ...chapterStart.current,
           examinedIds: [...chapterStart.current.examinedIds],
           consumedIds: [...chapterStart.current.consumedIds],
+          creditedIds: [...chapterStart.current.creditedIds],
           stallsVisited: [...chapterStart.current.stallsVisited],
         } : null,
       }));
       setHasSave(true);
     } catch (e) { /* private browsing / quota — play on without saving */ }
-  }, [started, sceneId, thread, currentChapter, examinedIds, consumedIds,
+  }, [started, sceneId, thread, currentChapter, examinedIds, consumedIds, creditedIds,
       stallsVisited, hasBaileyKey, hasRosePreserve, hasHourglass, hasMarble, hasBirdSkull]);
 
   useEffect(() => {
@@ -2759,6 +3580,7 @@ function Tealby() {
     setCurrentChapter(d.currentChapter);
     setExaminedIds(new Set(d.examinedIds || []));
     setConsumedIds(new Set(d.consumedIds || []));
+    setCreditedIds(new Set(d.creditedIds || []));
     setStallsVisited(new Set(d.stallsVisited || []));
     setHasBaileyKey(!!d.hasBaileyKey);
     setHasRosePreserve(!!d.hasRosePreserve);
@@ -2769,6 +3591,7 @@ function Tealby() {
       ...d.chapterStart,
       examinedIds: new Set(d.chapterStart.examinedIds || []),
       consumedIds: new Set(d.chapterStart.consumedIds || []),
+      creditedIds: new Set(d.chapterStart.creditedIds || []),
       stallsVisited: new Set(d.chapterStart.stallsVisited || []),
     } : null;
     setStarted(true);
@@ -2784,6 +3607,7 @@ function Tealby() {
     setLastChoice(choiceLabel);
     setRevealNote(null);
     setGainNote(null);
+    setFlinchNote(null);
     setLastThreadDelta(threadDelta ?? 0);
     applyThread(threadDelta);
 
@@ -2799,9 +3623,17 @@ function Tealby() {
 
       // Apply scene-level thread/gain on high tone
       if (toneAfter === "high") {
-        if (nextScene?.threadHigh) applyThread(nextScene.threadHigh);
+        const sceneKey = "scene:" + nextId;
+        if (nextScene?.threadHigh && !creditedIds.has(sceneKey)) {
+          applyThread(nextScene.threadHigh);
+          setCreditedIds(prev => new Set([...prev, sceneKey]));
+        }
         if (reveal) setRevealNote(reveal);
         if (gain || nextScene?.gainHigh) setGainNote(gain || nextScene.gainHigh);
+      } else if (nextScene?.flinchLow) {
+        // Below "high" she does things that are not like her. This is the beat
+        // where she surfaces, sees herself doing it, and goes back under.
+        setFlinchNote(nextScene.flinchLow);
       }
 
       if (nextScene?.isChapterEnd) {
@@ -2823,6 +3655,13 @@ function Tealby() {
 
   const handleChoice = (choice) => {
     if (animating) return;
+    // A gain is paid the first time only; a cost is paid every time.
+    const rawThread = choice.thread || 0;
+    const alreadyPaid = rawThread > 0 && creditedIds.has(choice.id);
+    const effectiveThread = alreadyPaid ? 0 : rawThread;
+    if (rawThread > 0 && !alreadyPaid) {
+      setCreditedIds(prev => new Set([...prev, choice.id]));
+    }
     const isLoop = choice.type === "examine" || choice.type === "toedip";
     if (isLoop) setExaminedIds(prev => new Set([...prev, choice.id]));
     if (choice.consumable) setConsumedIds(prev => new Set([...prev, choice.consumable]));
@@ -2840,7 +3679,7 @@ function Tealby() {
     goToScene(
       choice.next,
       choice.label,
-      choice.thread || 0,
+      effectiveThread,
       target?.revealHigh || null,
       target?.gainHigh
         ? (target.gainHighPre && !hasBaileyKey ? target.gainHighPre : target.gainHigh)
@@ -2853,6 +3692,7 @@ function Tealby() {
     setAnimating(true);
     setRevealNote(null);
     setGainNote(null);
+    setFlinchNote(null);
     setLastChoice(null);
     // Do NOT reset lastThreadDelta — bar holds its colour on Back
     setTimeout(() => {
@@ -2875,7 +3715,7 @@ function Tealby() {
   };
 
   const handleLockLeave = () => {
-    goToScene("ch3_hub", "You gather your things and step back.", 0, null, null);
+    goToScene("ch3_hub", "You gather your things and step back.", T.DRAIN_SM, null, null);
   };
 
   const jumpToScene = (sceneId, chapter, withItems = {}) => {
@@ -2884,13 +3724,14 @@ function Tealby() {
     setLastChoice(null);
     setRevealNote(null);
     setGainNote(null);
+    setFlinchNote(null);
     setShowChapterEnd(false);
     setLastThreadDelta(null);
     setAnimating(false);
     setDevMenuOpen(false);
     setStarted(true);
     chapterStart.current = { chapter, entryScene: sceneId, thread,
-      examinedIds: new Set(), consumedIds: new Set(), stallsVisited: new Set(),
+      examinedIds: new Set(), consumedIds: new Set(), creditedIds: new Set(), stallsVisited: new Set(),
       hasBaileyKey: !!withItems.baileyKey, hasRosePreserve: !!withItems.rosePreserve,
       hasHourglass: !!withItems.hourglass, hasMarble: !!withItems.marble,
       hasBirdSkull: !!withItems.skull };
@@ -2913,6 +3754,7 @@ function Tealby() {
     setLastChoice(null);
     setRevealNote(null);
     setGainNote(null);
+    setFlinchNote(null);
     setShowChapterEnd(false);
     setLastThreadDelta(null);
     setMenuOpen(false);
@@ -2927,6 +3769,7 @@ function Tealby() {
       chapter, entryScene, thread,
       examinedIds: new Set(examinedIds),
       consumedIds: new Set(consumedIds),
+      creditedIds: new Set(creditedIds),
       stallsVisited: new Set(stallsVisited),
       hasBaileyKey, hasRosePreserve, hasHourglass, hasMarble, hasBirdSkull,
     };
@@ -2948,6 +3791,7 @@ function Tealby() {
     setThread(MAX_THREAD);
     setExaminedIds(new Set());
     setConsumedIds(new Set());
+    setCreditedIds(new Set());
     setStallsVisited(new Set());
     setHasBaileyKey(false);
     setHasRosePreserve(false);
@@ -2958,7 +3802,7 @@ function Tealby() {
     setSceneId("opening");
     chapterStart.current = {
       chapter: 1, entryScene: "opening", thread: MAX_THREAD,
-      examinedIds: new Set(), consumedIds: new Set(), stallsVisited: new Set(),
+      examinedIds: new Set(), consumedIds: new Set(), creditedIds: new Set(), stallsVisited: new Set(),
       hasBaileyKey: false, hasRosePreserve: false,
       hasHourglass: false, hasMarble: false, hasBirdSkull: false,
     };
@@ -2978,6 +3822,7 @@ function Tealby() {
     setThread(snap.thread);
     setExaminedIds(new Set(snap.examinedIds));
     setConsumedIds(new Set(snap.consumedIds));
+    setCreditedIds(new Set(snap.creditedIds || []));
     setStallsVisited(new Set(snap.stallsVisited));
     setHasBaileyKey(snap.hasBaileyKey);
     setHasRosePreserve(snap.hasRosePreserve);
@@ -2995,6 +3840,7 @@ function Tealby() {
     setSceneId("opening");
     setExaminedIds(new Set());
     setConsumedIds(new Set());
+    setCreditedIds(new Set());
     setStallsVisited(new Set());
     setHasBaileyKey(false);
     setHasRosePreserve(false);
@@ -3497,6 +4343,17 @@ function Tealby() {
               fontSize: "0.8rem", color: "#6a9070", fontStyle: "italic",
               animation: "fadeIn 0.6s ease forwards",
             }}>{gainNote}</div>
+          )}
+
+          {/* FLINCH — a moment of clarity at mid/low thread */}
+          {!scene?.isMiniGame && !scene?.isLockGame && flinchNote && (
+            <div style={{
+              margin: "16px 0", padding: "10px 14px",
+              background: "#0c1410", border: "1px solid #2e2020",
+              borderLeft: "3px solid #7a4a4a", borderRadius: "3px",
+              fontSize: "0.8rem", color: "#c4b0b0",
+              animation: "fadeIn 0.9s ease forwards",
+            }}>{flinchNote}</div>
           )}
 
           <div style={{ height: "12px" }} />
